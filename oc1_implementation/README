@@ -1,0 +1,99 @@
+****************************************************************
+* Copyright 1993,1994 : Johns Hopkins University		*
+*                       Department of Computer Science		*
+****************************************************************
+* Contacts : murthy@cs.jhu.edu (Sreerama K. Murthy)             *
+*            salzberg@cs.jhu.edu (Steven Salzberg)              *
+*            kasif@cs.jhu.edu (Simon Kasif)                     *
+****************************************************************
+
+***** Notice for readers/users who retrieved this from the JAIR
+      online appendix *****
+
+  This source code is supplied "as is" without warranty of any kind, and
+  its authors and the Journal of Artificial Intelligence Research (JAIR)
+  and JAIR's publishers and distributors, disclaim any and all
+  warranties, including but not limited to any implied warranties of
+  merchantability and fitness for a particular purpose, and any
+  warranties or non infringement.  The user assumes all liability and
+  responsibility for use of this source code, and neither the author nor
+  JAIR, nor JAIR's publishers and distributors, will be liable for
+  damages of any kind resulting from its use.  Without limiting the
+  generality of the foregoing, neither the authors, nor JAIR, nor JAIR's
+  publishers and distributors, warrant that the Source Code will be
+  error-free, will operate without interruption, or will meet the needs
+  of the user.
+
+****************************************************************
+
+Welcome to OC1 Version 3.0!
+
+OC1 is a system to construct oblique decision trees from examples.
+Oblique decision trees are trees in which each node may contain a
+(linear) multivariate test on the attributes of the data.  OC1 also
+constructs standard axis-parallel trees, which contain tests of just
+one attribute at each node.  Oblique decision trees are a natural
+extension to the well-known axis-parallel trees.
+
+As no one decision tree building method (or, for that matter, machine
+learning method) is the best for all datasets, we feel that a machine
+learning researcher/practitioner should experiment with as many
+methods as possible when attempting to solve a problem.  To aid in
+this goal, we are making OC1 available in the public domain.  Please
+use it, experiment with it, and let us know your questions, comments
+or suggestions.  OC1 is intended for non-commercial use only, and you
+should feel free to use, copy, and modify it for such purposes.  Any
+commercial use of OC1 is strictly prohibited without the express
+written consent of the authors.
+
+The OC1 directory has four main components: 
+  "gendata" generates artificial datasets, given (optionally) a 
+            decision tree; 
+  "mktree"  builds decision trees out of data, estimates classification 
+            accuracies; 
+  "display" displays 2D datasets and/or decision trees as PostScript(R) files. 
+  "jair94-paper.ps" contains the PostScript(R) version of our paper:
+     S.K. Murthy, S. Kasif, S. Salzberg.
+     "A System for Induction of Oblique Decision Trees."
+     Journal of Artificial Intelligence Research 2 (1994) 1-33.
+
+If you use the OC1 software in the context of any of your
+publications, please reference the above paper.
+
+To install OC1, after "FTP"ing, uncompressing and unarchiving ("tar"ing) 
+the software, run the following commands:
+      $ make mktree
+      $ make gendata
+      $ make display 
+
+These commands will create the executable files for the three main
+commands available in the OC1 system.  You can get help on the usage
+of these commands (mktree, gendata and display), by typing the
+command, with no arguments, at the UNIX prompt.  First, though, we
+recommend that you look at the text file "sample_session", which
+contains a session with OC1 illustrating some of the available 
+options. Detailed descriptions of individual modules can be found
+in the files mktree.readme, gendata.readme, and display.readme.
+
+The complete, sufficiently (?!) documented, C source code of OC1 is
+available with this package.
+
+This directory also contains sample files (linear.train, sample.dt)
+giving the formats of a data file and a decision tree file,
+respectively.
+
+Finally, a note: using multivariate tests at each node of a decision
+tree has both advantages and disadvantages. The resulting trees may be
+smaller and/or more accurate, but they may be more time-consuming to
+induce than univariate trees. Afterall, nothing comes for free!
+
+Enjoy !
+
+-Sreerama K. Murthy
+ Steven Salzberg
+ Simon Kasif
+
+ Department of Computer Science
+ Johns Hopkins University
+ Baltimore, MD 21218
+ U.S.A.
