@@ -6,6 +6,7 @@ cdef class Tree:
 
     def __cinit__(self, splitter="oc1", random_state=None):
          cdef tree_node *root_node
+         printf('testing\n')
 
     def __init__(self, splitter="oc1", random_state=None):
         self.random_state = random_state

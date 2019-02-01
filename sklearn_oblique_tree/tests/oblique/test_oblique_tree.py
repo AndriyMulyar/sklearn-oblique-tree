@@ -10,7 +10,7 @@ class TestObliqueTree(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.X_train, cls.X_test, cls.y_train, cls.y_test = train_test_split(*load_iris(return_X_y=True), test_size=.4, random_state=random_state)
+        cls.X_train, cls.X_test, cls.y_train, cls.y_test = train_test_split(*load_iris(return_X_y=True), test_size=.4)
 
 
     def test_prediction_with_testing_pipeline(self):

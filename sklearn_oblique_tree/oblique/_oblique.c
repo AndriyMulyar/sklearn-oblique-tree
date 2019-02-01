@@ -24,7 +24,8 @@
             "oc1_source/compute_impurity.c",
             "oc1_source/impurity_measures.c",
             "oc1_source/prune.c",
-            "oc1_source/util.c"
+            "oc1_source/util.c",
+            "oc1_source/tree_util.c"
         ]
     },
     "module_name": "sklearn_oblique_tree.oblique._oblique"
@@ -1153,7 +1154,7 @@ static PyObject *__pyx_tuple__2;
  * 
  *     def __cinit__(self, splitter="oc1", random_state=None):             # <<<<<<<<<<<<<<
  *          cdef tree_node *root_node
- * 
+ *          printf('testing\n')
  */
 
 /* Python wrapper */
@@ -1230,14 +1231,31 @@ static int __pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree___cinit__(CY
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":9
+ *     def __cinit__(self, splitter="oc1", random_state=None):
+ *          cdef tree_node *root_node
+ *          printf('testing\n')             # <<<<<<<<<<<<<<
+ * 
+ *     def __init__(self, splitter="oc1", random_state=None):
+ */
+  (void)(printf(((char const *)"testing\n")));
+
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":7
+ * cdef class Tree:
+ * 
+ *     def __cinit__(self, splitter="oc1", random_state=None):             # <<<<<<<<<<<<<<
+ *          cdef tree_node *root_node
+ *          printf('testing\n')
+ */
+
   /* function exit code */
   __pyx_r = 0;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "sklearn_oblique_tree/oblique/_oblique.pyx":10
- *          cdef tree_node *root_node
+/* "sklearn_oblique_tree/oblique/_oblique.pyx":11
+ *          printf('testing\n')
  * 
  *     def __init__(self, splitter="oc1", random_state=None):             # <<<<<<<<<<<<<<
  *         self.random_state = random_state
@@ -1283,7 +1301,7 @@ static int __pyx_pw_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_3__init__(Py
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(1, 10, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(1, 11, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -1300,7 +1318,7 @@ static int __pyx_pw_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_3__init__(Py
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 10, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 11, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("sklearn_oblique_tree.oblique._oblique.Tree.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1318,26 +1336,26 @@ static int __pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_2__init__(st
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":11
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":12
  * 
  *     def __init__(self, splitter="oc1", random_state=None):
  *         self.random_state = random_state             # <<<<<<<<<<<<<<
  *         self.splitter = splitter
  * 
  */
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_random_state, __pyx_v_random_state) < 0) __PYX_ERR(1, 11, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_random_state, __pyx_v_random_state) < 0) __PYX_ERR(1, 12, __pyx_L1_error)
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":12
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":13
  *     def __init__(self, splitter="oc1", random_state=None):
  *         self.random_state = random_state
  *         self.splitter = splitter             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_splitter, __pyx_v_splitter) < 0) __PYX_ERR(1, 12, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_splitter, __pyx_v_splitter) < 0) __PYX_ERR(1, 13, __pyx_L1_error)
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":10
- *          cdef tree_node *root_node
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":11
+ *          printf('testing\n')
  * 
  *     def __init__(self, splitter="oc1", random_state=None):             # <<<<<<<<<<<<<<
  *         self.random_state = random_state
@@ -1355,7 +1373,7 @@ static int __pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_2__init__(st
   return __pyx_r;
 }
 
-/* "sklearn_oblique_tree/oblique/_oblique.pyx":16
+/* "sklearn_oblique_tree/oblique/_oblique.pyx":17
  * 
  * 
  *     cdef fit(self, X, y):             # <<<<<<<<<<<<<<
@@ -1368,7 +1386,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(CYT
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("fit", 0);
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":23
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":24
  *         :return:
  *         """
  *         printf('testing\n')             # <<<<<<<<<<<<<<
@@ -1377,7 +1395,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(CYT
  */
   (void)(printf(((char const *)"testing\n")));
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":16
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":17
  * 
  * 
  *     cdef fit(self, X, y):             # <<<<<<<<<<<<<<
@@ -1392,7 +1410,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(CYT
   return __pyx_r;
 }
 
-/* "sklearn_oblique_tree/oblique/_oblique.pyx":27
+/* "sklearn_oblique_tree/oblique/_oblique.pyx":28
  * 
  * 
  *     def predict(self, X):             # <<<<<<<<<<<<<<
