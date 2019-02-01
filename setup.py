@@ -2,28 +2,26 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 from setuptools.extension import Extension
 from Cython.Build import cythonize
-import numpy
-from sklearn_oblique_tree import __version__, __authors__
-import sys
+
+from sklearn_oblique_tree import __authors__, __version__
+import numpy,sys
+
 
 packages = find_packages()
 
 extensions = [
-     Extension(
-         "indictrans._decode.beamsearch",
-         [
-             "indictrans/_decode/beamsearch.pyx"
-         ],
-         include_dirs=[numpy.get_include()]
-     ),
-     Extension(
-         "indictrans._decode.viterbi",
-         [
-             "indictrans/_decode/viterbi.pyx"
-         ],
-         include_dirs=[numpy.get_include()]
+     Extension("sklearn_oblique_tree.oblique._oblique",["sklearn_oblique_tree/oblique/_oblique.pyx",
+                                                        "oc1_source/load_data.c",
+                                                        "oc1_source/perturb.c",
+                                                        "oc1_source/classify.c",
+                                                        "oc1_source/compute_impurity.c",
+                                                        "oc1_source/impurity_measures.c",
+                                                        "oc1_source/prune.c",
+                                                        "oc1_source/util.c"
+                                                        ],
+               include_dirs=[numpy.get_include(), '.'],
+               extra_compile_args=["-w"]
      )
-
     ]
 
 
@@ -71,10 +69,9 @@ setup(
     ],
     install_requires=[
         'scikit-learn>=0.20.0',
-        'numpy',
-        'Cython'
+        'numpy'
     ],
-    ext_modules=cythonize(extensions),
+    ext_modules=cythonize(extensions, gdb_debug=True),
 
     #testing
     tests_require=["pytest"],
