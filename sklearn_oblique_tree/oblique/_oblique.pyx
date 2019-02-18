@@ -10,10 +10,10 @@ cdef class Tree:
     def __cinit__(self, str splitter):
         self.splitter = splitter
     def __dealloc__(self):
-        #deallocate_structures()
-        pass
+        global no_of_train_points
+        deallocate_structures(no_of_train_points)
 
-    cpdef fit(self, np.ndarray[np.float_t, ndim=2, mode="c"] X, numpy.ndarray[np.int_t, mode="c"] y):
+    cpdef fit(self, np.ndarray[np.float_t, ndim=2, mode="c"] X, numpy.ndarray[np.int_t, mode="c"] y, int number_of_restarts, int max_perturbations):
         """
         Grows an Oblique Decision Tree by calling sub-routines from Murphys implementation of OC1 and Cart-Linear
         :param X:
@@ -24,9 +24,17 @@ cdef class Tree:
         cdef int i
         #modify global settings in implementation
         global no_of_dimensions
-        global no_of_categories
-        global sklearn_root_node
+        global no_of_categories #number of classes
+        global no_of_train_points #number of points trained with
+        global sklearn_root_node #point to root node of tree to build
+        global no_of_restarts
+        global max_no_of_random_perturbations
 
+        max_no_of_random_perturbations = max_perturbations
+        no_of_train_points = num_points
+        no_of_restarts = number_of_restarts
+
+        #no_of_restarts = self.no_of_restarts
         no_of_categories = len(np.unique(y))
         no_of_dimensions = len(X[0])
 
@@ -50,7 +58,9 @@ cdef class Tree:
 
 
 
-        sklearn_root_node = build_tree((points), num_points, NULL)
+        sklearn_root_node = build_tree(points, num_points, NULL)
+
+
 
 
     cpdef predict(self, np.ndarray[np.float_t, ndim=2, mode="c"] X):
@@ -59,7 +69,6 @@ cdef class Tree:
         cdef POINT ** points_predict = <POINT**> malloc(num_predict_points * sizeof(POINT*))
         cdef np.ndarray[np.int32_t, ndim=1] predictions = np.empty(num_predict_points, dtype=np.int32)
         global sklearn_root_node
-        printf("%i\n", num_predict_points)
         points_predict -= 1 #implementation is indexed from 1.
 
         for i in range(1,num_predict_points+1):
@@ -74,7 +83,7 @@ cdef class Tree:
         classify(points_predict, num_predict_points, sklearn_root_node, NULL)
 
         for i in range(1,num_predict_points+1):
-            predictions[i-1] = points_predict[i].category - 1
+            predictions[i-1] = points_predict[i].category - 1 #decrement to account for increment in train
 
         return predictions
 

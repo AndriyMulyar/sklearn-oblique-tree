@@ -22,6 +22,10 @@ cdef extern from "../../oc1_source/mktree.c":
 
     cdef int no_of_dimensions
     cdef int no_of_categories
+    cdef int no_of_restarts
+    cdef int no_of_train_points
+    cdef int max_no_of_random_perturbations
+
     cdef tree_node* sklearn_root_node
 
     cdef float IMPURITY "IMPURITY"
@@ -31,8 +35,8 @@ cdef extern from "../../oc1_source/mktree.c":
         int category
         double val
 
-    void allocate_structures(no_of_points)
-    void deallocate_structures(no_of_points)
+    void allocate_structures(int no_of_points)
+    void deallocate_structures(int no_of_points)
     void classify(POINT** points, int no_of_points, tree_node* root,char* output)
 
     tree_node* build_tree(POINT** points, int no_of_points, char * dt_file)
@@ -41,5 +45,5 @@ cdef extern from "../../oc1_source/mktree.c":
 
 cdef class Tree:
     cpdef str splitter
-    cpdef fit(self, numpy.ndarray[numpy.float_t, ndim=2, mode="c"] X, numpy.ndarray[numpy.int_t, mode="c"] y)
+    cpdef fit(self, numpy.ndarray[numpy.float_t, ndim=2, mode="c"] X, numpy.ndarray[numpy.int_t, mode="c"] y, int number_of_restarts, int max_perturbations)
     cpdef predict(self, numpy.ndarray y)

@@ -73,7 +73,7 @@ FILE * perturb_file = NULL;
 
 POINT ** train_points = NULL, ** test_points = NULL;
 struct tree_node * sklearn_root_node = NULL;
-
+int no_of_train_points;
 /************************************************************************/
 /* Module name : main							*/
 /* Functionality :	Accepts user's options as input, sets control	*/
@@ -499,10 +499,11 @@ char * dt_file; {
     print_log_and_exit();
   } else root -> parent = NULL;
 
-  /* Prune.*/
-  if (prune_portion != 0)
-    proot = prune(root, ptest_points, no_of_ptest_points);
-  else proot = root;
+//  /* Prune.*/
+//  if (prune_portion != 0)
+//    proot = prune(root, ptest_points, no_of_ptest_points);
+//  else proot = root;
+    proot = root;
 
   /* Write the trees to files. */
 //  if (strlen(dt_file)) {
@@ -576,7 +577,7 @@ int cur_no_of_points; {
   double initial_impurity, cur_impurity;
   char lnode_str[MAX_DT_DEPTH], rnode_str[MAX_DT_DEPTH];
 
-  printf("Current number of points %i\n", cur_no_of_points);
+  //printf("Current number of points %i\n", cur_no_of_points);
   /* Validation checks */
   if (cur_no_of_points <= TOO_SMALL_FOR_ANY_SPLIT) return (NULL);
   if (strlen(node_str) + 1 > MAX_DT_DEPTH) {

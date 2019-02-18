@@ -1,5 +1,5 @@
 from unittest import TestCase
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_iris, load_breast_cancer
 from sklearn.model_selection import train_test_split
 from sklearn_oblique_tree.oblique import ObliqueTree
 from sklearn.metrics import accuracy_score
@@ -11,15 +11,23 @@ class TestObliqueTree(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.X_train, cls.X_test, cls.y_train, cls.y_test = train_test_split(*load_iris(return_X_y=True), test_size=.4)
+        cls.classifier = ObliqueTree(splitter="oc1")
 
 
-    def test_prediction_with_testing_pipeline(self):
-        tree = ObliqueTree(splitter="oc1")
-        tree.fit(self.X_train, self.y_train)
+    def test_iris(self):
+        X_train, X_test, y_train, y_test = train_test_split(*load_iris(return_X_y=True), test_size=.4)
+        self.classifier.fit(X_train, y_train)
 
-        predictions = tree.predict(self.X_test)
+        predictions = self.classifier.predict(X_test)
 
 
-        print(accuracy_score(self.y_test, predictions))
+        print("Iris Accuracy:",accuracy_score(y_test, predictions))
+
+    def test_breast(self):
+        X_train, X_test, y_train, y_test = train_test_split(*load_breast_cancer(return_X_y=True), test_size=.4)
+        self.classifier.fit(X_train, y_train)
+        predictions = self.classifier.predict(X_test)
+
+
+        print("Breast Cancer Accuracy:", accuracy_score(y_test, predictions))
 
