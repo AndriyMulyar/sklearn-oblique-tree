@@ -52,11 +52,11 @@ classify (points,no_of_points,root,output)
 {
   FILE *outfile; 
   int i,j;
-  float myrandom();
+  double myrandom();
   struct tree_node *cur_node;
   double sum;
  
-  if ((outfile = fopen(output,"w")) == NULL) outfile = stdout;
+  //if ((outfile = fopen(output,"w")) == NULL) outfile = stdout;
   
   for (i=1;i<=no_of_points;i++)
     {
@@ -87,10 +87,9 @@ classify (points,no_of_points,root,output)
 		}
 	    }
 	}
-      print_point(outfile,points[i],FALSE);
+      //print_point(outfile,points[i],FALSE);
     }
-  
-  if (outfile != stdout) fclose(outfile);
+
 }
 
 /************************************************************************/

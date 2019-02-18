@@ -46,7 +46,7 @@ int wait_time=1;
 struct tree_node *extra_node;
 struct point **train_points;
 struct tree_node *box;
-float xmax=1.0,xmin=0.0,ymax=1.0,ymin=0.0,xmargin,ymargin;
+double xmax=1.0,xmin=0.0,ymax=1.0,ymin=0.0,xmargin,ymargin;
 int pminx=72, pmaxx=540, pminy=72, pmaxy = 640;
 
 FILE *psfile;
@@ -208,7 +208,7 @@ set_extremes(psfile)
      FILE *psfile;
 {
   int i;
-  float x,y,x1,x2,y1,y2,xrange,yrange;
+  double x,y,x1,x2,y1,y2,xrange,yrange;
   
   if (no_of_samples == 0) return;
   
@@ -254,7 +254,7 @@ display_point(psfile,p)
      FILE *psfile;
      POINT *p;
 {
-  float x1,y1;
+  double x1,y1;
   
   x1 = translatex(p->dimension[1]);
   y1 = translatey(p->dimension[2]);
@@ -573,7 +573,7 @@ erase_hyperplane(psfile,cur_node,count)
      int count;
 {
   int i;
-  float d;
+  double d;
   struct tree_node *node;
   
   if (!strlen(cur_node->label))
@@ -617,9 +617,9 @@ erase_hyperplane(psfile,cur_node,count)
 /* Is called by modules :	find_edge				*/
 /************************************************************************/
 struct endpoint intersection(c1,c2)
-     float *c1,*c2;
+     double *c1,*c2;
 {
-  float denom;
+  double denom;
   struct endpoint p;
     
   denom = c2[2] * c1[1] - c2[1] * c1[2];
@@ -682,7 +682,7 @@ int onedge(p,e)
 /* Is called by modules : find_edge					*/
 /* Important Variables used : TOLERANCE : A very small positive number	*/
 /*			      defined in oc1.h, needed to compensate	*/
-/*			      for peculiarities in floating point	*/
+/*			      for peculiarities in doubleing point	*/
 /*			      arithmetic on Unix.			*/
 /* Remarks : This assumes that the decision tree is displayed in a	*/
 /*	     pre-order traversal.					*/
@@ -691,7 +691,7 @@ int correct_side(p,cur_node)
      struct endpoint p;
      struct tree_node *cur_node;
 {
-  float sum;
+  double sum;
   struct tree_node *node,*parent;
   
   node = cur_node;
@@ -945,7 +945,7 @@ struct tree_node *read_hp(dtree)
      FILE *dtree;
 {
   struct tree_node *cur_node;
-  float temp;
+  double temp;
   char c,*read_label();
   int i;
   

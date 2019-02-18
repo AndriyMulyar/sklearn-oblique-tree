@@ -22,10 +22,11 @@ class ObliqueTree(BaseEstimator, ClassifierMixin):
         X, y = check_X_y(X, y)
         random_state = check_random_state(self.random_state)
         self.classes_ = unique_labels(y)
-        Tree.fit(X,y)
+        self.tree = Tree(splitter=self.splitter)
+        self.tree.fit(X,y)
 
 
 
     def predict(self, X):
-        pass
+        return self.tree.predict(X)
 

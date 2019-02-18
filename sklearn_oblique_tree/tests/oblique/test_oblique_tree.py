@@ -2,6 +2,7 @@ from unittest import TestCase
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn_oblique_tree.oblique import ObliqueTree
+from sklearn.metrics import accuracy_score
 
 class TestObliqueTree(TestCase):
     """
@@ -16,4 +17,9 @@ class TestObliqueTree(TestCase):
     def test_prediction_with_testing_pipeline(self):
         tree = ObliqueTree(splitter="oc1")
         tree.fit(self.X_train, self.y_train)
+
+        predictions = tree.predict(self.X_test)
+
+
+        print(accuracy_score(self.y_test, predictions))
 

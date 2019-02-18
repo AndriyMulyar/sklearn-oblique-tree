@@ -31,7 +31,7 @@
 /*                      number of  classes (categories) and the */
 /*                      counts of points of each class on the   */
 /*                      left and right of the hyperplane.       */
-/*                      All measures return a nonnegative float */
+/*                      All measures return a nonnegative double */
 /*                      impurity value, where the lower the     */
 /*                      impurity, the better the hyperplane.    */
 /*                      All measures are called from the module */
@@ -57,7 +57,7 @@ int largest_element();
 /*		except the class with the highest count.)		*/
 /* Calls modules :	largest_element (compute_impurity.c)		*/
 /************************************************************************/
-float maxminority()
+double maxminority()
 {
   int i,j,lminor=0,rminor=0;
   
@@ -72,8 +72,8 @@ float maxminority()
       if (i != j) rminor += right_count[j];
   
   if (lminor > rminor) 
-    return((float)lminor); 
-  else return((float)rminor);
+    return((double)lminor);
+  else return((double)rminor);
 }
 
 /************************************************************************/
@@ -88,7 +88,7 @@ float maxminority()
 /*		except the class with the highest count.)		*/
 /* Calls modules :	largest_element (compute_impurity.c)		*/
 /************************************************************************/
-float summinority()
+double summinority()
 {
   int i,j,lminor=0,rminor=0;
   
@@ -102,7 +102,7 @@ float summinority()
     for (j=1;j<=no_of_categories ;j++) 
       if (i != j) rminor += right_count[j];
   
-  return((float)(lminor+rminor)); 
+  return((double)(lminor+rminor));
 }
 
 /************************************************************************/
@@ -117,9 +117,9 @@ float summinority()
 /*		points on that side of the hyperplane, and		*/
 /*		avg = (x1+x2+..+xk)/k.					*/
 /************************************************************************/
-float variance()
+double variance()
 {
-  float lavg=0,ravg=0,lerror = 0,rerror = 0;
+  double lavg=0,ravg=0,lerror = 0,rerror = 0;
   int i,lsum1=0,rsum1=0,lsum2=0,rsum2=0;
   int *temp1=NULL,*temp2=NULL;
   int var_compare();
@@ -148,8 +148,8 @@ float variance()
       rsum2 += i * right_count[i];
     }
 
-  if (lsum1 != 0) lavg = (float)lsum2/lsum1;
-  if (rsum1 != 0) ravg = (float)rsum2/rsum1;
+  if (lsum1 != 0) lavg = (double)lsum2/lsum1;
+  if (rsum1 != 0) ravg = (double)rsum2/rsum1;
   
   for (i=1;i<=no_of_categories;i++)
     {
@@ -199,12 +199,12 @@ int *p1,*p2;
 /* Remarks : Much less efficient to compute than the minority measures. */
 /*           But often works much better.                               */
 /************************************************************************/
-float info_gain()
+double info_gain()
 {
-  float presplit_info=0,postsplit_info=0,left_info=0,right_info=0;
-  float ratio,infogain;
+  double presplit_info=0,postsplit_info=0,left_info=0,right_info=0;
+  double ratio,infogain;
   int i,total_count=0,total_left_count=0,total_right_count=0;
-  float mylog2();
+  double mylog2();
   
   for (i = 1;i<=no_of_categories;i++) 
     {
@@ -216,7 +216,7 @@ float info_gain()
   if (total_count)
     for (i = 1;i<=no_of_categories;i++)
       {
-	ratio = (float)(left_count[i]+right_count[i])/total_count;
+	ratio = (double)(left_count[i]+right_count[i])/total_count;
 	if (ratio) presplit_info += -1.0 * ratio * mylog2(ratio);
       }
   
@@ -224,7 +224,7 @@ float info_gain()
     {
       for (i = 1;i<=no_of_categories;i++)
 	{
-	  ratio = (float)left_count[i]/total_left_count;
+	  ratio = (double)left_count[i]/total_left_count;
 	  if (ratio) left_info += -1.0 * ratio * mylog2(ratio);
 	}
       postsplit_info += total_left_count * left_info / total_count;
@@ -234,7 +234,7 @@ float info_gain()
     {
       for (i = 1;i<=no_of_categories;i++)
 	{
-	  ratio = (float)right_count[i]/total_right_count;
+	  ratio = (double)right_count[i]/total_right_count;
 	  if (ratio) right_info += -1.0 * ratio * mylog2(ratio);
 	}
       postsplit_info += total_right_count * right_info / total_count;
@@ -262,10 +262,10 @@ float info_gain()
 /* Remarks : Efficient to compute - No log computations.                */
 /*           Performs quite well.                                       */
 /************************************************************************/
-float gini_index()
+double gini_index()
 {
   int total_left_count=0,total_right_count=0;
-  float temp,gini_left=0,gini_right=0,gini_value;
+  double temp,gini_left=0,gini_right=0,gini_value;
   int i,j;
 
   for (i=1;i<=no_of_categories;i++)
@@ -305,12 +305,12 @@ float gini_index()
 /*                      A statistical measure of probability distribution divergence.  D. Cieslak, 2011.  */
 /* Remarks : Performs well on imbalanced data                                                             */
 /**********************************************************************************************************/
-float hellinger_distance()
+double hellinger_distance()
 {
   int total_left_count=0,total_right_count=0;
-  float class_i_prob,class_j_prob,hellinger_left=0,hellinger_right=0,dimension,hellinger_value;
+  double class_i_prob,class_j_prob,hellinger_left=0,hellinger_right=0,dimension,hellinger_value;
   int i,j;
-  float SQRT_TWO = sqrt(2);
+  double SQRT_TWO = sqrt(2);
 
   for (i=1;i<=no_of_categories;i++)
     {
@@ -364,10 +364,10 @@ float hellinger_distance()
 /*			The twoing measure is described in detail  	*/
 /*			by Leo Breiman et al in their CART book (1984).	*/
 /************************************************************************/
-float twoing()
+double twoing()
 {
-  float total_left_count=0,total_right_count=0,total_count;
-  float goodness=0,temp,twoing_val;
+  double total_left_count=0,total_right_count=0,total_count;
+  double goodness=0,temp,twoing_val;
   int i;
   
   for (i=1;i<=no_of_categories;i++)

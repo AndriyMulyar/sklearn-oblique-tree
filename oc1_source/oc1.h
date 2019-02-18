@@ -20,7 +20,10 @@
 
 /* Change the following statement to use a different impurity measure. */
 
-#define IMPURITY hellinger_distance()
+#define IMPURITY gini_index()
+#define GINI_INDEX = gini_index()
+#define HELLINGER = hellinger_distance()
+
 /* possible values are: maxminority                             */
 /*			summinority				*/
 /*			variance				*/
@@ -72,7 +75,7 @@
 
 typedef struct point
  {
-   float *dimension;
+   double *dimension;
    int category;
    double val; /*Value obtained by substituting this point in the 
                 equation of the hyperplane under consideration.
@@ -82,7 +85,7 @@ typedef struct point
 
 struct endpoint
  {
-  float x,y;
+  double x,y;
  };
 
 typedef struct edge
@@ -92,32 +95,32 @@ typedef struct edge
 
 struct tree_node
  {
-  float *coefficients;
+  double *coefficients;
   int *left_count, *right_count;
   struct tree_node *parent,*left,*right;
   int left_cat,right_cat;
   char label[MAX_DT_DEPTH];
-  float alpha; /* used only in error_complexity pruning. */
+  double alpha; /* used only in error_complexity pruning. */
   int no_of_points;
   EDGE edge; /* used only in the display module. */
- };
+ }TREE_NODE;
 
 struct unidim
  {
-  float value;
+  double value;
   int cat;
  };
 
 struct test_outcome
  {
-  float leaf_count,tree_depth;
-  float accuracy;
+  double leaf_count,tree_depth;
+  double accuracy;
   int *class; /*For each class, store the number of correctly
                 classified examples and total number of examples */
  };
 
 void error(),free_ivector(),free_vector(),free_dvector();
-float myrandom(),*vector();
+double myrandom(),*vector();
 double *dvector();
 int *ivector();
-float average(),sdev();
+double average(),sdev();

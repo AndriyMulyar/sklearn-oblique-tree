@@ -30,8 +30,8 @@
 extern int no_of_dimensions;
 extern int no_of_categories;
 extern int no_of_missing_values, unlabeled;
-extern float * min_attribute_value, * avg_attribute_value;
-extern float * sdev_attribute_value;
+extern double * min_attribute_value, * avg_attribute_value;
+extern double * sdev_attribute_value;
 
 int * category_array = NULL;
 
@@ -58,7 +58,7 @@ FILE * infile;
 POINT ** * points_ptr; {
   int points_allocated = 0, i, j, categories_unknown = FALSE;
   int point_count, training_set = TRUE;
-  float temp;
+  double temp;
   char c, delim[10];
   POINT ** allocate_point_array();
   POINT ** array_name = NULL;
@@ -125,8 +125,8 @@ POINT ** * points_ptr; {
             no_of_dimensions = dim;
             for (i = 1; i <= points_allocated; i++) {
               array_name[i] -> dimension += 1;
-              array_name[i] -> dimension = (float * ) realloc(array_name[i] -> dimension,
-                no_of_dimensions * sizeof(float));
+              array_name[i] -> dimension = (double * ) realloc(array_name[i] -> dimension,
+                no_of_dimensions * sizeof(double));
               array_name[i] -> dimension -= 1;
             }
             break;
@@ -320,7 +320,7 @@ int count; {
   POINT * temp_point;
 
   for (i = 1; i <= count; i++) {
-    newposition = (int) myrandom(1.0, (float) count);
+    newposition = (int) myrandom(1.0, (double) count);
     /* shuffle position "i" with "newposition" */
 
     temp_point = array_name[i];
@@ -348,7 +348,7 @@ fill_missing_values(points, no_of_points)
 struct point ** points;
 int no_of_points; {
   int i, j, count;
-  float avg, average(), * temp;
+  double avg, average(), * temp;
 
   temp = vector(1, no_of_points);
 

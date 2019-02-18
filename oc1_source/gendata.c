@@ -51,7 +51,7 @@ main(argc,argv)
   extern int optind;
   int c1,i,j,no_of_samples;
   int *point_count;
-  float above,below;
+  double above,below;
   char decision_tree[LINESIZE];
   struct point **points_array = NULL,**allocate_point_array();
   struct tree_node *root = NULL,*read_tree();

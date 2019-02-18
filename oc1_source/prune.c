@@ -31,7 +31,7 @@
 extern int no_of_coeffs,no_of_categories;
 extern int verbose;
 
-float *alpha_array;
+double *alpha_array;
 int alpha_index=0;
 int total_points=0;
 int no_of_ptest_points;
@@ -104,8 +104,8 @@ struct tree_node *error_complexity_prune(root)
   struct test_outcome 	estimate_accuracy();
   int 			tree_index,no_of_trees,selected_tree;
   int 			i,internal_nodes,leaf_count(),largest_element();
-  float 		misclassification_rate,temp,standard_error;
-  float			*accuracies=NULL;
+  double 		misclassification_rate,temp,standard_error;
+  double			*accuracies=NULL;
 
 
   internal_nodes = leaf_count(root) - 1;
@@ -147,7 +147,7 @@ struct tree_node *error_complexity_prune(root)
   tree_index = largest_element(accuracies,no_of_trees);
 
   misclassification_rate = 1 - accuracies[tree_index]/100;
-  standard_error = (float)sqrt((double)(misclassification_rate *
+  standard_error = (double)sqrt((double)(misclassification_rate *
 					(1 - misclassification_rate) / 
 					no_of_ptest_points));
   selected_tree = tree_index;
@@ -180,7 +180,7 @@ struct tree_node *error_complexity_prune(root)
 /*			replicate_tree					*/
 /*			cut_subtrees					*/
 /* Is called by modules :	error_complexity_prune			*/
-/* Important Variables used :	alpha_array : Is a float array of length*/
+/* Important Variables used :	alpha_array : Is a double array of length*/
 /*				equal to the number of internal nodes	*/
 /*				in the tree. This stores the alpha	*/
 /*				value for each internal node in the	*/
@@ -195,7 +195,7 @@ struct tree_node *error_complexity_prune(root)
 struct tree_node *cut_weakest_links(dtree)
      struct tree_node *dtree;
 {
-  float x,y;
+  double x,y;
   int i,internal_nodes,leaf_count(),index=0;
   struct tree_node *dtree2,*replicate_tree();
   
@@ -244,8 +244,8 @@ compute_alpha(node)
      struct tree_node *node;
 {
   int leaf_count();
-  float ncost,scost;
-  float node_cost(),subtree_cost();
+  double ncost,scost;
+  double node_cost(),subtree_cost();
   
   if (node == NULL) return;
   
@@ -264,16 +264,16 @@ compute_alpha(node)
 /* Functionality :	recursively computes the cost of the subtree 	*/
 /*			below an internal node.				*/
 /* Parameters :	cur_node : pointer to a decision tree node.		*/	
-/* Returns :	A floating point number, representing the cost of	*/
+/* Returns :	A doubleing point number, representing the cost of	*/
 /*		the subtree at cur_node.				*/
 /* Calls modules :	subtree_cost					*/
 /* Is called by modules :	compute_alpha				*/
 /*				subtree_cost				*/
 /************************************************************************/
-float subtree_cost(cur_node)
+double subtree_cost(cur_node)
      struct tree_node *cur_node;
 {
-  float cost=0,subtree_cost();
+  double cost=0,subtree_cost();
   int i,misclassified;
   
   if (cur_node->left == NULL)
@@ -282,7 +282,7 @@ float subtree_cost(cur_node)
       for (i=1;i<=no_of_categories;i++)
 	if (i != cur_node->left_cat) misclassified += cur_node->left_count[i];
       
-      cost += (float)misclassified/total_points;
+      cost += (double)misclassified/total_points;
     }
   else cost += subtree_cost(cur_node->left); 
   
@@ -292,7 +292,7 @@ float subtree_cost(cur_node)
       for (i=1;i<=no_of_categories;i++)
 	if (i != cur_node->right_cat) misclassified += cur_node->right_count[i];
 
-      cost += (float)misclassified/total_points;
+      cost += (double)misclassified/total_points;
     }
   else cost += subtree_cost(cur_node->right); 
   
@@ -303,12 +303,12 @@ float subtree_cost(cur_node)
 /* Module name : node_cost						*/
 /* Functionality :	computes the cost of a node.			*/
 /* Parameters :	cur_node : pointer to the DT node under consideration.	*/
-/* Returns :	A floating point number, representing the cost of	*/
+/* Returns :	A doubleing point number, representing the cost of	*/
 /*		*cur_node.						*/
 /* Calls modules : None							*/
 /* Is called by modules :	compute_alpha				*/
 /************************************************************************/
-float node_cost(cur_node)
+double node_cost(cur_node)
      struct tree_node *cur_node;
 {
   int i,max=1,misclassified=0;
@@ -322,7 +322,7 @@ float node_cost(cur_node)
     if (i != max)
       misclassified += cur_node->left_count[i] + cur_node->right_count[i];
   
-  return((float)misclassified/total_points);
+  return((double)misclassified/total_points);
 } 
  
 /************************************************************************/
@@ -393,7 +393,7 @@ struct tree_node *replicate_tree(root)
 /************************************************************************/
 cut_subtrees(cur_node,alpha_threshold)
      struct tree_node *cur_node;
-     float alpha_threshold;
+     double alpha_threshold;
 {
   if (cur_node == NULL) return;
   

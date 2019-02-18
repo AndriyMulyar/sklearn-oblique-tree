@@ -25,6 +25,7 @@ extensions = [
                                                         ],
                include_dirs=[numpy.get_include(), '.'],
                extra_compile_args=["-w"]
+
      )
     ]
 

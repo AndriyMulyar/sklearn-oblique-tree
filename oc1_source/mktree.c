@@ -55,12 +55,12 @@ int no_of_stagnant_perturbations, no_of_missing_values = 0;
 int no_of_train_points = 0, no_of_test_points = 0;
 int stop_splitting();
 
-float compute_impurity();
-float * coeff_array, * modified_coeff_array, * best_coeff_array;
-float prune_portion = 0.1;
-float myabs(), ap_bias = 1.0;
-float zeroing_tendency = 0.1;
-float * attribute_min, * attribute_avg, * attribute_sdev;
+double compute_impurity();
+double * coeff_array, * modified_coeff_array, * best_coeff_array;
+double prune_portion = 0.1;
+double myabs(), ap_bias = 1.0;
+double zeroing_tendency = 0.1;
+double * attribute_min, * attribute_avg, * attribute_sdev;
 double * temp_val;
 
 void srand48();
@@ -72,6 +72,7 @@ FILE * animationfile = NULL;
 FILE * perturb_file = NULL;
 
 POINT ** train_points = NULL, ** test_points = NULL;
+struct tree_node * sklearn_root_node = NULL;
 
 /************************************************************************/
 /* Module name : main							*/
@@ -103,7 +104,7 @@ char * argv[]; {
   int i, j, no_of_correctly_classified_test_points;
   struct tree_node * root = NULL, * build_tree(), * read_tree();
   struct test_outcome result;
-  float accuracy;
+  double accuracy;
 
   strcpy(train_data, "\0");
   strcpy(test_data, "\0");
@@ -454,36 +455,40 @@ char * dt_file; {
     }
   }
 
-  write_header(animationfile);
+//  write_header(animationfile);
 
-  /* divide the training instances into a training set and a pruning set*/
-  no_of_ptest_points = (int)(no_of_points * prune_portion);
-  if (no_of_ptest_points) {
-    no_of_train_points = no_of_points - no_of_ptest_points;
-    if (verbose) printf("%d randomly chosen instances kept away for pruning.\n\n",
-      no_of_ptest_points);
-    /* "randomly chosen" because the points are shuffled in Read_Data. */
+//  /* divide the training instances into a training set and a pruning set*/
+//  no_of_ptest_points = (int)(no_of_points * prune_portion);
+//  if (no_of_ptest_points) {
+//    no_of_train_points = no_of_points - no_of_ptest_points;
+//    if (verbose) printf("%d randomly chosen instances kept away for pruning.\n\n",
+//      no_of_ptest_points);
+//    /* "randomly chosen" because the points are shuffled in Read_Data. */
+//
+//    train_points = allocate_point_array(train_points, no_of_train_points, 0);
+//    for (i = 1; i <= no_of_train_points; i++) {
+//      for (j = 1; j <= no_of_dimensions; j++)
+//        train_points[i] -> dimension[j] = points[i] -> dimension[j];
+//      train_points[i] -> category = points[i] -> category;
+//      train_points[i] -> val = points[i] -> val;
+//    }
+//
+//    ptest_points = allocate_point_array(ptest_points, no_of_ptest_points, 0);
+//    for (i = no_of_train_points + 1; i <= no_of_points; i++) {
+//      k = i - no_of_train_points;
+//      for (j = 1; j <= no_of_dimensions; j++)
+//        ptest_points[k] -> dimension[j] = points[i] -> dimension[j];
+//      ptest_points[k] -> category = points[i] -> category;
+//      ptest_points[k] -> val = points[i] -> val;
+//    }
+//  } else {
+//    train_points = points;
+//    no_of_train_points = no_of_points;
+//  }
+  train_points = points;
+  no_of_train_points = no_of_points;
 
-    train_points = allocate_point_array(train_points, no_of_train_points, 0);
-    for (i = 1; i <= no_of_train_points; i++) {
-      for (j = 1; j <= no_of_dimensions; j++)
-        train_points[i] -> dimension[j] = points[i] -> dimension[j];
-      train_points[i] -> category = points[i] -> category;
-      train_points[i] -> val = points[i] -> val;
-    }
 
-    ptest_points = allocate_point_array(ptest_points, no_of_ptest_points, 0);
-    for (i = no_of_train_points + 1; i <= no_of_points; i++) {
-      k = i - no_of_train_points;
-      for (j = 1; j <= no_of_dimensions; j++)
-        ptest_points[k] -> dimension[j] = points[i] -> dimension[j];
-      ptest_points[k] -> category = points[i] -> category;
-      ptest_points[k] -> val = points[i] -> val;
-    }
-  } else {
-    train_points = points;
-    no_of_train_points = no_of_points;
-  }
 
   /* Build the tree recursively. */
   root = build_subtree("\0", train_points, no_of_train_points);
@@ -500,20 +505,20 @@ char * dt_file; {
   else proot = root;
 
   /* Write the trees to files. */
-  if (strlen(dt_file)) {
-    write_tree(proot, dt_file);
-    if (proot == root) /* No pruning was done. */
-      printf("Unpruned decision tree written to %s.\n", dt_file);
-    else {
-      char temp_str[LINESIZE];
-
-      printf("Pruned decision tree written to %s.\n", dt_file);
-      sprintf(temp_str, "%s.unpruned", dt_file);
-      write_tree(root, temp_str);
-      printf("Unpruned decision tree written to %s.\n", temp_str);
-
-    }
-  }
+//  if (strlen(dt_file)) {
+//    write_tree(proot, dt_file);
+//    if (proot == root) /* No pruning was done. */
+//      printf("Unpruned decision tree written to %s.\n", dt_file);
+//    else {
+//      char temp_str[LINESIZE];
+//
+//      printf("Pruned decision tree written to %s.\n", dt_file);
+//      sprintf(temp_str, "%s.unpruned", dt_file);
+//      write_tree(root, temp_str);
+//      printf("Unpruned decision tree written to %s.\n", temp_str);
+//
+//    }
+//  }
 
   root = proot;
   return (root);
@@ -567,10 +572,11 @@ int cur_no_of_points; {
   struct tree_node * build_subtree(), * create_tree_node();
   POINT ** lpoints = NULL, ** rpoints = NULL;
   int i, lindex, rindex, lpt, rpt;
-  float oblique_split(), axis_parallel_split(), cart_split();
-  float initial_impurity, cur_impurity;
+  double oblique_split(), axis_parallel_split(), cart_split();
+  double initial_impurity, cur_impurity;
   char lnode_str[MAX_DT_DEPTH], rnode_str[MAX_DT_DEPTH];
 
+  printf("Current number of points %i\n", cur_no_of_points);
   /* Validation checks */
   if (cur_no_of_points <= TOO_SMALL_FOR_ANY_SPLIT) return (NULL);
   if (strlen(node_str) + 1 > MAX_DT_DEPTH) {
@@ -580,6 +586,7 @@ int cur_no_of_points; {
   }
 
   set_counts(cur_points, cur_no_of_points, 0);
+
   cur_impurity = initial_impurity = compute_impurity(cur_no_of_points);
   if (cur_impurity == 0.0) return (NULL);
 
@@ -593,7 +600,7 @@ int cur_no_of_points; {
       cur_impurity = axis_parallel_split(cur_points, cur_no_of_points);
 
     if (cur_impurity && oblique && cur_no_of_points > TOO_SMALL_FOR_OBLIQUE_SPLIT) {
-      float * ap_coeff_array, oblique_impurity;
+      double * ap_coeff_array, oblique_impurity;
 
       ap_coeff_array = vector(1, no_of_coeffs);
       for (i = 1; i <= no_of_coeffs; i++) ap_coeff_array[i] = coeff_array[i];
@@ -708,13 +715,13 @@ int cur_no_of_points; {
 /* Is called by modules : build_subtree                                 */
 /* Remarks : See the CART book for a description of the algorithm.      */
 /************************************************************************/
-float cart_split(cur_points, cur_no_of_points, cur_label)
+double cart_split(cur_points, cur_no_of_points, cur_label)
 POINT ** cur_points;
 int cur_no_of_points;
 char * cur_label; {
   int cur_coeff;
-  float cur_error, new_error, prev_impurity, myabs();
-  float cart_perturb(), cart_perturb_constant();
+  double cur_error, new_error, prev_impurity, myabs();
+  double cart_perturb(), cart_perturb_constant();
 
   /*Starts with the best axis parallel hyperplane. */
   write_hyperplane(animationfile, cur_label);
@@ -820,7 +827,7 @@ struct tree_node * create_tree_node() {
 /*			perturb_randomly (perturb.c)			*/
 /* Is called by modules :	build_subtree				*/
 /************************************************************************/
-float oblique_split(cur_points, cur_no_of_points, cur_label)
+double oblique_split(cur_points, cur_no_of_points, cur_label)
 POINT ** cur_points;
 int cur_no_of_points;
 char * cur_label; {
@@ -828,10 +835,10 @@ char * cur_label; {
   int i, j, old_nsp, restart_count = 1;
   int alter_coefficients();
   int cur_coeff, improved_in_this_cycle, best_coeff_to_improve;
-  float perturb_randomly();
-  float cur_error, old_cur_error, best_cur_error, least_error;
-  float x, changeinval;
-  float new_error, suggest_perturbation();
+  double perturb_randomly();
+  double cur_error, old_cur_error, best_cur_error, least_error;
+  double x, changeinval;
+  double new_error, suggest_perturbation();
 
   /*Start with the best axis parallel hyperplane if axis_parallel is true.
     Otherwise start with a random hyperplane. */
@@ -858,7 +865,7 @@ char * cur_label; {
         if (cur_error == 0.0) break;
         cur_coeff = 0;
         while (!cur_coeff)
-          cur_coeff = (int) myrandom(1.0, (float)(no_of_coeffs + 1));
+          cur_coeff = (int) myrandom(1.0, (double)(no_of_coeffs + 1));
 
         new_error = suggest_perturbation(cur_points, cur_no_of_points,
           cur_coeff, cur_error);
@@ -1047,12 +1054,12 @@ int cur_no_of_points; {
 /*			compute_impurity (compute_impurity.c)		*/
 /* Is called by modules :	build_subtree				*/
 /************************************************************************/
-float axis_parallel_split(cur_points, cur_no_of_points)
+double axis_parallel_split(cur_points, cur_no_of_points)
 POINT ** cur_points;
 int cur_no_of_points; {
   int i, j, cur_coeff, best_coeff;
-  float cur_error, best_error, best_coeff_split_at;
-  float linear_split();
+  double cur_error, best_error, best_coeff_split_at;
+  double linear_split();
 
   for (i = 1; i <= no_of_coeffs; i++) coeff_array[i] = 0;
 
@@ -1062,7 +1069,7 @@ int cur_no_of_points; {
       candidates[j].value = cur_points[j] -> dimension[cur_coeff];
       candidates[j].cat = cur_points[j] -> category;
     }
-    coeff_array[no_of_coeffs] = -1.0 * (float) linear_split(cur_no_of_points);
+    coeff_array[no_of_coeffs] = -1.0 * (double) linear_split(cur_no_of_points);
 
     coeff_modified = TRUE;
     find_values(cur_points, cur_no_of_points);
@@ -1421,7 +1428,7 @@ normalize_data(points, no_of_points)
 struct point ** points;
 int no_of_points; {
   int i, j;
-  float * temp, average(), sdev(), min();
+  double * temp, average(), sdev(), min();
 
   temp = vector(1, no_of_points);
 
