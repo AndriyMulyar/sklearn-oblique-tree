@@ -44,4 +44,3 @@ print("Iris Accuracy:",accuracy_score(y_test, predictions))
 # Acknowledgements
 VCU Imbalanced Learning and Data Stream Mining Laboratory     ![alt text](https://nlp.cs.vcu.edu/images/vcu_head_logo "VCU")
 
-
