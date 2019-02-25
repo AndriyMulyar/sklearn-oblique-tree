@@ -38,8 +38,6 @@ random_state = 2
 #For multivariate CART select 'cart' splitter
 #tree = ObliqueTree(splitter="cart", number_of_restarts=20, max_perturbations=5, random_state=random_state)
 
-
-
 #consider only oblique splits
 tree = ObliqueTree(splitter="oc1", number_of_restarts=20, max_perturbations=5, random_state=random_state)
 
