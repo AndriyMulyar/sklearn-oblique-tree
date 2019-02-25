@@ -77,7 +77,8 @@ setup(
         'scikit-learn>=0.20.0',
         'numpy'
     ],
-    ext_modules=cythonize(extensions, gdb_debug=True),
+    #ext_modules=cythonize(extensions, gdb_debug=False),
+    ext_modules=extensions,
 
     #testing
     tests_require=["pytest"],
