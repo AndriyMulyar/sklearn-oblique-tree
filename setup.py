@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 from setuptools.extension import Extension
-from Cython.Build import cythonize
+#from Cython.Build import cythonize
 
 from sklearn_oblique_tree import __authors__, __version__
 import numpy,sys
