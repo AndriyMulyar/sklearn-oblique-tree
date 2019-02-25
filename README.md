@@ -29,9 +29,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn_oblique_tree.oblique import ObliqueTree
 
-tree = ObliqueTree(splitter="oc1", number_of_restarts=20, max_perturbations=5)
+random_state = 1
 
-X_train, X_test, y_train, y_test = train_test_split(*load_iris(return_X_y=True), test_size=.4)
+tree = ObliqueTree(splitter="oc1", number_of_restarts=20, max_perturbations=5, random_state=random_state)
+
+X_train, X_test, y_train, y_test = train_test_split(*load_iris(return_X_y=True), test_size=.4, random_state=random_state)
 
 tree.fit(X_train, y_train)
 
