@@ -646,6 +646,7 @@ static CYTHON_INLINE float __PYX_NAN() {
 #include <stdio.h>
 #include "numpy/arrayobject.h"
 #include "numpy/ufuncobject.h"
+#include "stdio.h"
 #include "../../oc1_source/mktree.c"
 #include <stdlib.h>
 #ifdef _OPENMP
@@ -1171,12 +1172,12 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 
-/* "sklearn_oblique_tree/oblique/_oblique.pxd":46
+/* "sklearn_oblique_tree/oblique/_oblique.pxd":55
  * 
  * 
  * cdef class Tree:             # <<<<<<<<<<<<<<
  *     cpdef str splitter
- *     cpdef fit(self, numpy.ndarray[numpy.float_t, ndim=2, mode="c"] X, numpy.ndarray[numpy.int_t, mode="c"] y, int number_of_restarts, int max_perturbations)
+ *     cpdef fit(self, numpy.ndarray[numpy.float_t, ndim=2, mode="c"] X, numpy.ndarray[numpy.int_t, mode="c"] y, long int random_state, str splitter,  int number_of_restarts, int max_perturbations)
  */
 struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree {
   PyObject_HEAD
@@ -1195,7 +1196,7 @@ struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree {
  */
 
 struct __pyx_vtabstruct_20sklearn_oblique_tree_7oblique_8_oblique_Tree {
-  PyObject *(*fit)(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *, PyArrayObject *, PyArrayObject *, int, int, int __pyx_skip_dispatch);
+  PyObject *(*fit)(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *, PyArrayObject *, PyArrayObject *, long, PyObject *, int, int, int __pyx_skip_dispatch);
   PyObject *(*predict)(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *, PyArrayObject *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_vtabptr_20sklearn_oblique_tree_7oblique_8_oblique_Tree;
@@ -1349,6 +1350,12 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg
 #else
 #define __Pyx_PyObject_Call(func, arg, kw) PyObject_Call(func, arg, kw)
 #endif
+
+/* PySequenceContains.proto */
+static CYTHON_INLINE int __Pyx_PySequence_ContainsTF(PyObject* item, PyObject* seq, int eq) {
+    int result = PySequence_Contains(seq, item);
+    return unlikely(result < 0) ? result : (result == (eq == Py_EQ));
+}
 
 /* GetModuleGlobalName.proto */
 #if CYTHON_USE_DICT_VERSIONS
@@ -1588,17 +1595,10 @@ typedef struct {
 
 
 /* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
-
-/* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
-/* Print.proto */
-static int __Pyx_Print(PyObject*, PyObject *, int);
-#if CYTHON_COMPILING_IN_PYPY || PY_MAJOR_VERSION >= 3
-static PyObject* __pyx_print = 0;
-static PyObject* __pyx_print_kwargs = 0;
-#endif
+/* CIntToPy.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
 /* RealImag.proto */
 #if CYTHON_CCOMPLEX
@@ -1702,13 +1702,10 @@ static PyObject* __pyx_print_kwargs = 0;
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_enum__NPY_TYPES(enum NPY_TYPES value);
 
 /* CIntFromPy.proto */
-static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
-
-/* PrintOne.proto */
-static int __Pyx_PrintOne(PyObject* stream, PyObject *o);
+static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
 
 /* CIntFromPy.proto */
-static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
+static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
 
 /* FastTypeChecks.proto */
 #if CYTHON_COMPILING_IN_CPYTHON
@@ -1729,7 +1726,7 @@ static int __Pyx_check_binary_version(void);
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
-static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, int __pyx_v_number_of_restarts, int __pyx_v_max_perturbations, int __pyx_skip_dispatch); /* proto*/
+static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(CYTHON_UNUSED struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, long __pyx_v_random_state, PyObject *__pyx_v_splitter, int __pyx_v_number_of_restarts, int __pyx_v_max_perturbations, int __pyx_skip_dispatch); /* proto*/
 static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict(CYTHON_UNUSED struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, PyArrayObject *__pyx_v_X, int __pyx_skip_dispatch); /* proto*/
 
 /* Module declarations from 'cpython.buffer' */
@@ -1781,10 +1778,10 @@ static PyObject *__pyx_builtin_ImportError;
 static const char __pyx_k_X[] = "X";
 static const char __pyx_k_y[] = "y";
 static const char __pyx_k_np[] = "np";
-static const char __pyx_k_end[] = "end";
 static const char __pyx_k_fit[] = "fit";
+static const char __pyx_k_oc1[] = "oc1";
 static const char __pyx_k_Tree[] = "Tree";
-static const char __pyx_k_file[] = "file";
+static const char __pyx_k_cart[] = "cart";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_test[] = "__test__";
@@ -1792,7 +1789,6 @@ static const char __pyx_k_dtype[] = "dtype";
 static const char __pyx_k_empty[] = "empty";
 static const char __pyx_k_int32[] = "int32";
 static const char __pyx_k_numpy[] = "numpy";
-static const char __pyx_k_print[] = "print";
 static const char __pyx_k_range[] = "range";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_reduce[] = "__reduce__";
@@ -1807,6 +1803,8 @@ static const char __pyx_k_ValueError[] = "ValueError";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_ImportError[] = "ImportError";
 static const char __pyx_k_RuntimeError[] = "RuntimeError";
+static const char __pyx_k_random_state[] = "random_state";
+static const char __pyx_k_axis_parallel[] = "axis_parallel";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
 static const char __pyx_k_max_perturbations[] = "max_perturbations";
@@ -1830,11 +1828,11 @@ static PyObject *__pyx_n_s_Tree;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_n_s_X;
+static PyObject *__pyx_n_s_axis_parallel;
+static PyObject *__pyx_n_s_cart;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_dtype;
 static PyObject *__pyx_n_s_empty;
-static PyObject *__pyx_n_s_end;
-static PyObject *__pyx_n_s_file;
 static PyObject *__pyx_n_s_fit;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_import;
@@ -1850,9 +1848,10 @@ static PyObject *__pyx_n_s_number_of_restarts;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_kp_s_numpy_core_multiarray_failed_to;
 static PyObject *__pyx_kp_s_numpy_core_umath_failed_to_impor;
+static PyObject *__pyx_n_s_oc1;
 static PyObject *__pyx_n_s_predict;
-static PyObject *__pyx_n_s_print;
 static PyObject *__pyx_n_s_pyx_vtable;
+static PyObject *__pyx_n_s_random_state;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_reduce;
 static PyObject *__pyx_n_s_reduce_cython;
@@ -1866,7 +1865,7 @@ static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
 static PyObject *__pyx_n_s_y;
 static int __pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree___cinit__(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, PyObject *__pyx_v_splitter); /* proto */
 static void __pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_2__dealloc__(CYTHON_UNUSED struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_4fit(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, int __pyx_v_number_of_restarts, int __pyx_v_max_perturbations); /* proto */
+static PyObject *__pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_4fit(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, long __pyx_v_random_state, PyObject *__pyx_v_splitter, int __pyx_v_number_of_restarts, int __pyx_v_max_perturbations); /* proto */
 static PyObject *__pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_6predict(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, PyArrayObject *__pyx_v_X); /* proto */
 static PyObject *__pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_8__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_10__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
@@ -2007,7 +2006,7 @@ static void __pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_2__dealloc_
  *         global no_of_train_points
  *         deallocate_structures(no_of_train_points)             # <<<<<<<<<<<<<<
  * 
- *     cpdef fit(self, np.ndarray[np.float_t, ndim=2, mode="c"] X, numpy.ndarray[np.int_t, mode="c"] y, int number_of_restarts, int max_perturbations):
+ *     cpdef fit(self, np.ndarray[np.float_t, ndim=2, mode="c"] X, numpy.ndarray[np.int_t, mode="c"] y, long int random_state, str splitter, int number_of_restarts, int max_perturbations):
  */
   deallocate_structures(no_of_train_points);
 
@@ -2026,13 +2025,13 @@ static void __pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_2__dealloc_
 /* "sklearn_oblique_tree/oblique/_oblique.pyx":16
  *         deallocate_structures(no_of_train_points)
  * 
- *     cpdef fit(self, np.ndarray[np.float_t, ndim=2, mode="c"] X, numpy.ndarray[np.int_t, mode="c"] y, int number_of_restarts, int max_perturbations):             # <<<<<<<<<<<<<<
+ *     cpdef fit(self, np.ndarray[np.float_t, ndim=2, mode="c"] X, numpy.ndarray[np.int_t, mode="c"] y, long int random_state, str splitter, int number_of_restarts, int max_perturbations):             # <<<<<<<<<<<<<<
  *         """
  *         Grows an Oblique Decision Tree by calling sub-routines from Murphys implementation of OC1 and Cart-Linear
  */
 
 static PyObject *__pyx_pw_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_5fit(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, int __pyx_v_number_of_restarts, int __pyx_v_max_perturbations, int __pyx_skip_dispatch) {
+static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(CYTHON_UNUSED struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, long __pyx_v_random_state, PyObject *__pyx_v_splitter, int __pyx_v_number_of_restarts, int __pyx_v_max_perturbations, int __pyx_skip_dispatch) {
   int __pyx_v_num_points;
   int __pyx_v_i;
   POINT **__pyx_v_points;
@@ -2048,15 +2047,18 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(str
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
-  int __pyx_t_7;
-  PyObject *__pyx_t_8 = NULL;
-  Py_ssize_t __pyx_t_9;
-  long __pyx_t_10;
-  long __pyx_t_11;
-  Py_ssize_t __pyx_t_12;
-  Py_ssize_t __pyx_t_13;
-  int __pyx_t_14;
+  PyObject *__pyx_t_7 = NULL;
+  int __pyx_t_8;
+  PyObject *__pyx_t_9 = NULL;
+  Py_ssize_t __pyx_t_10;
+  int __pyx_t_11;
+  int __pyx_t_12;
+  long __pyx_t_13;
+  long __pyx_t_14;
   Py_ssize_t __pyx_t_15;
+  Py_ssize_t __pyx_t_16;
+  int __pyx_t_17;
+  Py_ssize_t __pyx_t_18;
   __Pyx_RefNannySetupContext("fit", 0);
   __pyx_pybuffer_X.pybuffer.buf = NULL;
   __pyx_pybuffer_X.refcount = 0;
@@ -2090,66 +2092,76 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(str
       __Pyx_GOTREF(__pyx_t_1);
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_5fit)) {
         __Pyx_XDECREF(__pyx_r);
-        __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_number_of_restarts); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 16, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyInt_From_long(__pyx_v_random_state); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 16, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_max_perturbations); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 16, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_number_of_restarts); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 16, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
+        __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_max_perturbations); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 16, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
         __Pyx_INCREF(__pyx_t_1);
-        __pyx_t_5 = __pyx_t_1; __pyx_t_6 = NULL;
-        __pyx_t_7 = 0;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
-          __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
-          if (likely(__pyx_t_6)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-            __Pyx_INCREF(__pyx_t_6);
+        __pyx_t_6 = __pyx_t_1; __pyx_t_7 = NULL;
+        __pyx_t_8 = 0;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
+          __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_6);
+          if (likely(__pyx_t_7)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+            __Pyx_INCREF(__pyx_t_7);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_5, function);
-            __pyx_t_7 = 1;
+            __Pyx_DECREF_SET(__pyx_t_6, function);
+            __pyx_t_8 = 1;
           }
         }
         #if CYTHON_FAST_PYCALL
-        if (PyFunction_Check(__pyx_t_5)) {
-          PyObject *__pyx_temp[5] = {__pyx_t_6, ((PyObject *)__pyx_v_X), ((PyObject *)__pyx_v_y), __pyx_t_3, __pyx_t_4};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 4+__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+        if (PyFunction_Check(__pyx_t_6)) {
+          PyObject *__pyx_temp[7] = {__pyx_t_7, ((PyObject *)__pyx_v_X), ((PyObject *)__pyx_v_y), __pyx_t_3, __pyx_v_splitter, __pyx_t_4, __pyx_t_5};
+          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_8, 6+__pyx_t_8); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
+          __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         } else
         #endif
         #if CYTHON_FAST_PYCCALL
-        if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-          PyObject *__pyx_temp[5] = {__pyx_t_6, ((PyObject *)__pyx_v_X), ((PyObject *)__pyx_v_y), __pyx_t_3, __pyx_t_4};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 4+__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+        if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
+          PyObject *__pyx_temp[7] = {__pyx_t_7, ((PyObject *)__pyx_v_X), ((PyObject *)__pyx_v_y), __pyx_t_3, __pyx_v_splitter, __pyx_t_4, __pyx_t_5};
+          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_8, 6+__pyx_t_8); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
+          __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         } else
         #endif
         {
-          __pyx_t_8 = PyTuple_New(4+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 16, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          if (__pyx_t_6) {
-            __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
+          __pyx_t_9 = PyTuple_New(6+__pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 16, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_9);
+          if (__pyx_t_7) {
+            __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_7); __pyx_t_7 = NULL;
           }
           __Pyx_INCREF(((PyObject *)__pyx_v_X));
           __Pyx_GIVEREF(((PyObject *)__pyx_v_X));
-          PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_7, ((PyObject *)__pyx_v_X));
+          PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_8, ((PyObject *)__pyx_v_X));
           __Pyx_INCREF(((PyObject *)__pyx_v_y));
           __Pyx_GIVEREF(((PyObject *)__pyx_v_y));
-          PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, ((PyObject *)__pyx_v_y));
+          PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_8, ((PyObject *)__pyx_v_y));
           __Pyx_GIVEREF(__pyx_t_3);
-          PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_7, __pyx_t_3);
+          PyTuple_SET_ITEM(__pyx_t_9, 2+__pyx_t_8, __pyx_t_3);
+          __Pyx_INCREF(__pyx_v_splitter);
+          __Pyx_GIVEREF(__pyx_v_splitter);
+          PyTuple_SET_ITEM(__pyx_t_9, 3+__pyx_t_8, __pyx_v_splitter);
           __Pyx_GIVEREF(__pyx_t_4);
-          PyTuple_SET_ITEM(__pyx_t_8, 3+__pyx_t_7, __pyx_t_4);
+          PyTuple_SET_ITEM(__pyx_t_9, 4+__pyx_t_8, __pyx_t_4);
+          __Pyx_GIVEREF(__pyx_t_5);
+          PyTuple_SET_ITEM(__pyx_t_9, 5+__pyx_t_8, __pyx_t_5);
           __pyx_t_3 = 0;
           __pyx_t_4 = 0;
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
+          __pyx_t_5 = 0;
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_9, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         }
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
         __pyx_r = __pyx_t_2;
         __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -2175,11 +2187,134 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(str
  *         cdef int i
  *         #modify global settings in implementation
  */
-  __pyx_t_9 = PyObject_Length(((PyObject *)__pyx_v_y)); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 23, __pyx_L1_error)
-  __pyx_v_num_points = __pyx_t_9;
+  __pyx_t_10 = PyObject_Length(((PyObject *)__pyx_v_y)); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_v_num_points = __pyx_t_10;
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":33
- *         global max_no_of_random_perturbations
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":35
+ *         global axis_parallel
+ *         global cart_mode
+ *         oblique = False             # <<<<<<<<<<<<<<
+ *         axis_parallel = False
+ *         cart_mode = False
+ */
+  oblique = 0;
+
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":36
+ *         global cart_mode
+ *         oblique = False
+ *         axis_parallel = False             # <<<<<<<<<<<<<<
+ *         cart_mode = False
+ * 
+ */
+  axis_parallel = 0;
+
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":37
+ *         oblique = False
+ *         axis_parallel = False
+ *         cart_mode = False             # <<<<<<<<<<<<<<
+ * 
+ *         if "oc1" in splitter:
+ */
+  cart_mode = 0;
+
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":39
+ *         cart_mode = False
+ * 
+ *         if "oc1" in splitter:             # <<<<<<<<<<<<<<
+ *             oblique = True
+ *         if "cart" in splitter: #if this is set, the implementation overrides the other splitters.
+ */
+  __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_oc1, __pyx_v_splitter, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_12 = (__pyx_t_11 != 0);
+  if (__pyx_t_12) {
+
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":40
+ * 
+ *         if "oc1" in splitter:
+ *             oblique = True             # <<<<<<<<<<<<<<
+ *         if "cart" in splitter: #if this is set, the implementation overrides the other splitters.
+ *             cart_mode = True
+ */
+    oblique = 1;
+
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":39
+ *         cart_mode = False
+ * 
+ *         if "oc1" in splitter:             # <<<<<<<<<<<<<<
+ *             oblique = True
+ *         if "cart" in splitter: #if this is set, the implementation overrides the other splitters.
+ */
+  }
+
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":41
+ *         if "oc1" in splitter:
+ *             oblique = True
+ *         if "cart" in splitter: #if this is set, the implementation overrides the other splitters.             # <<<<<<<<<<<<<<
+ *             cart_mode = True
+ *         if "axis_parallel" in splitter:
+ */
+  __pyx_t_12 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_cart, __pyx_v_splitter, Py_EQ)); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_11 = (__pyx_t_12 != 0);
+  if (__pyx_t_11) {
+
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":42
+ *             oblique = True
+ *         if "cart" in splitter: #if this is set, the implementation overrides the other splitters.
+ *             cart_mode = True             # <<<<<<<<<<<<<<
+ *         if "axis_parallel" in splitter:
+ *             axis_parallel = True
+ */
+    cart_mode = 1;
+
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":41
+ *         if "oc1" in splitter:
+ *             oblique = True
+ *         if "cart" in splitter: #if this is set, the implementation overrides the other splitters.             # <<<<<<<<<<<<<<
+ *             cart_mode = True
+ *         if "axis_parallel" in splitter:
+ */
+  }
+
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":43
+ *         if "cart" in splitter: #if this is set, the implementation overrides the other splitters.
+ *             cart_mode = True
+ *         if "axis_parallel" in splitter:             # <<<<<<<<<<<<<<
+ *             axis_parallel = True
+ * 
+ */
+  __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_axis_parallel, __pyx_v_splitter, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 43, __pyx_L1_error)
+  __pyx_t_12 = (__pyx_t_11 != 0);
+  if (__pyx_t_12) {
+
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":44
+ *             cart_mode = True
+ *         if "axis_parallel" in splitter:
+ *             axis_parallel = True             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+    axis_parallel = 1;
+
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":43
+ *         if "cart" in splitter: #if this is set, the implementation overrides the other splitters.
+ *             cart_mode = True
+ *         if "axis_parallel" in splitter:             # <<<<<<<<<<<<<<
+ *             axis_parallel = True
+ * 
+ */
+  }
+
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":47
+ * 
+ * 
+ *         srand48(random_state) #set random state             # <<<<<<<<<<<<<<
+ * 
+ *         max_no_of_random_perturbations = max_perturbations
+ */
+  srand48(__pyx_v_random_state);
+
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":49
+ *         srand48(random_state) #set random state
  * 
  *         max_no_of_random_perturbations = max_perturbations             # <<<<<<<<<<<<<<
  *         no_of_train_points = num_points
@@ -2187,7 +2322,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(str
  */
   max_no_of_random_perturbations = __pyx_v_max_perturbations;
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":34
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":50
  * 
  *         max_no_of_random_perturbations = max_perturbations
  *         no_of_train_points = num_points             # <<<<<<<<<<<<<<
@@ -2196,7 +2331,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(str
  */
   no_of_train_points = __pyx_v_num_points;
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":35
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":51
  *         max_no_of_random_perturbations = max_perturbations
  *         no_of_train_points = num_points
  *         no_of_restarts = number_of_restarts             # <<<<<<<<<<<<<<
@@ -2205,51 +2340,51 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(str
  */
   no_of_restarts = __pyx_v_number_of_restarts;
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":38
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":54
  * 
  *         #no_of_restarts = self.no_of_restarts
  *         no_of_categories = len(np.unique(y))             # <<<<<<<<<<<<<<
  *         no_of_dimensions = len(X[0])
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_unique); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 38, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_unique); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_5);
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_6);
     if (likely(__pyx_t_2)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
       __Pyx_INCREF(__pyx_t_2);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_5, function);
+      __Pyx_DECREF_SET(__pyx_t_6, function);
     }
   }
-  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_2, ((PyObject *)__pyx_v_y)) : __Pyx_PyObject_CallOneArg(__pyx_t_5, ((PyObject *)__pyx_v_y));
+  __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_2, ((PyObject *)__pyx_v_y)) : __Pyx_PyObject_CallOneArg(__pyx_t_6, ((PyObject *)__pyx_v_y));
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_9 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 38, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_10 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  no_of_categories = __pyx_t_9;
+  no_of_categories = __pyx_t_10;
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":39
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":55
  *         #no_of_restarts = self.no_of_restarts
  *         no_of_categories = len(np.unique(y))
  *         no_of_dimensions = len(X[0])             # <<<<<<<<<<<<<<
  * 
  *         cdef POINT ** points = <POINT**> malloc(num_points * sizeof(POINT*))
  */
-  __pyx_t_1 = __Pyx_GetItemInt(((PyObject *)__pyx_v_X), 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetItemInt(((PyObject *)__pyx_v_X), 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_9 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_10 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  no_of_dimensions = __pyx_t_9;
+  no_of_dimensions = __pyx_t_10;
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":41
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":57
  *         no_of_dimensions = len(X[0])
  * 
  *         cdef POINT ** points = <POINT**> malloc(num_points * sizeof(POINT*))             # <<<<<<<<<<<<<<
@@ -2258,111 +2393,102 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(str
  */
   __pyx_v_points = ((POINT **)malloc((__pyx_v_num_points * (sizeof(POINT *)))));
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":42
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":58
  * 
  *         cdef POINT ** points = <POINT**> malloc(num_points * sizeof(POINT*))
  *         allocate_structures(num_points)             # <<<<<<<<<<<<<<
  * 
- *         #implementation is index from 1 like why the hell.
+ *         #implementation is indexed from 1 like why the hell.
  */
   allocate_structures(__pyx_v_num_points);
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":45
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":61
  * 
- *         #implementation is index from 1 like why the hell.
+ *         #implementation is indexed from 1 like why the hell.
  *         points -= 1             # <<<<<<<<<<<<<<
  * 
  *         for i in range(1,num_points+1):
  */
   __pyx_v_points = (__pyx_v_points - 1);
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":47
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":63
  *         points -= 1
  * 
  *         for i in range(1,num_points+1):             # <<<<<<<<<<<<<<
  *             points[i] = <POINT * > malloc( sizeof(POINT *))
  * 
  */
-  __pyx_t_10 = (__pyx_v_num_points + 1);
-  __pyx_t_11 = __pyx_t_10;
-  for (__pyx_t_7 = 1; __pyx_t_7 < __pyx_t_11; __pyx_t_7+=1) {
-    __pyx_v_i = __pyx_t_7;
+  __pyx_t_13 = (__pyx_v_num_points + 1);
+  __pyx_t_14 = __pyx_t_13;
+  for (__pyx_t_8 = 1; __pyx_t_8 < __pyx_t_14; __pyx_t_8+=1) {
+    __pyx_v_i = __pyx_t_8;
 
-    /* "sklearn_oblique_tree/oblique/_oblique.pyx":48
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":64
  * 
  *         for i in range(1,num_points+1):
  *             points[i] = <POINT * > malloc( sizeof(POINT *))             # <<<<<<<<<<<<<<
  * 
- * 
+ *         for i in range(1,num_points+1):
  */
     (__pyx_v_points[__pyx_v_i]) = ((POINT *)malloc((sizeof(POINT *))));
   }
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":52
- * 
- * 
- *         print(self.splitter)             # <<<<<<<<<<<<<<
- * 
- *         for i in range(1,num_points+1):
- */
-  if (__Pyx_PrintOne(0, __pyx_v_self->splitter) < 0) __PYX_ERR(0, 52, __pyx_L1_error)
-
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":54
- *         print(self.splitter)
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":66
+ *             points[i] = <POINT * > malloc( sizeof(POINT *))
  * 
  *         for i in range(1,num_points+1):             # <<<<<<<<<<<<<<
  *             points[i].dimension = (&X[i-1,0] - 1)
  *             points[i].category = y[i-1] + 1
  */
-  __pyx_t_10 = (__pyx_v_num_points + 1);
-  __pyx_t_11 = __pyx_t_10;
-  for (__pyx_t_7 = 1; __pyx_t_7 < __pyx_t_11; __pyx_t_7+=1) {
-    __pyx_v_i = __pyx_t_7;
+  __pyx_t_13 = (__pyx_v_num_points + 1);
+  __pyx_t_14 = __pyx_t_13;
+  for (__pyx_t_8 = 1; __pyx_t_8 < __pyx_t_14; __pyx_t_8+=1) {
+    __pyx_v_i = __pyx_t_8;
 
-    /* "sklearn_oblique_tree/oblique/_oblique.pyx":55
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":67
  * 
  *         for i in range(1,num_points+1):
  *             points[i].dimension = (&X[i-1,0] - 1)             # <<<<<<<<<<<<<<
  *             points[i].category = y[i-1] + 1
  *             points[i].val = 0
  */
-    __pyx_t_12 = (__pyx_v_i - 1);
-    __pyx_t_13 = 0;
-    __pyx_t_14 = -1;
-    if (__pyx_t_12 < 0) {
-      __pyx_t_12 += __pyx_pybuffernd_X.diminfo[0].shape;
-      if (unlikely(__pyx_t_12 < 0)) __pyx_t_14 = 0;
-    } else if (unlikely(__pyx_t_12 >= __pyx_pybuffernd_X.diminfo[0].shape)) __pyx_t_14 = 0;
-    if (__pyx_t_13 < 0) {
-      __pyx_t_13 += __pyx_pybuffernd_X.diminfo[1].shape;
-      if (unlikely(__pyx_t_13 < 0)) __pyx_t_14 = 1;
-    } else if (unlikely(__pyx_t_13 >= __pyx_pybuffernd_X.diminfo[1].shape)) __pyx_t_14 = 1;
-    if (unlikely(__pyx_t_14 != -1)) {
-      __Pyx_RaiseBufferIndexError(__pyx_t_14);
-      __PYX_ERR(0, 55, __pyx_L1_error)
+    __pyx_t_15 = (__pyx_v_i - 1);
+    __pyx_t_16 = 0;
+    __pyx_t_17 = -1;
+    if (__pyx_t_15 < 0) {
+      __pyx_t_15 += __pyx_pybuffernd_X.diminfo[0].shape;
+      if (unlikely(__pyx_t_15 < 0)) __pyx_t_17 = 0;
+    } else if (unlikely(__pyx_t_15 >= __pyx_pybuffernd_X.diminfo[0].shape)) __pyx_t_17 = 0;
+    if (__pyx_t_16 < 0) {
+      __pyx_t_16 += __pyx_pybuffernd_X.diminfo[1].shape;
+      if (unlikely(__pyx_t_16 < 0)) __pyx_t_17 = 1;
+    } else if (unlikely(__pyx_t_16 >= __pyx_pybuffernd_X.diminfo[1].shape)) __pyx_t_17 = 1;
+    if (unlikely(__pyx_t_17 != -1)) {
+      __Pyx_RaiseBufferIndexError(__pyx_t_17);
+      __PYX_ERR(0, 67, __pyx_L1_error)
     }
-    (__pyx_v_points[__pyx_v_i])->dimension = ((&(*__Pyx_BufPtrCContig2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_13, __pyx_pybuffernd_X.diminfo[1].strides))) - 1);
+    (__pyx_v_points[__pyx_v_i])->dimension = ((&(*__Pyx_BufPtrCContig2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_15, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_16, __pyx_pybuffernd_X.diminfo[1].strides))) - 1);
 
-    /* "sklearn_oblique_tree/oblique/_oblique.pyx":56
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":68
  *         for i in range(1,num_points+1):
  *             points[i].dimension = (&X[i-1,0] - 1)
  *             points[i].category = y[i-1] + 1             # <<<<<<<<<<<<<<
  *             points[i].val = 0
  * 
  */
-    __pyx_t_15 = (__pyx_v_i - 1);
-    __pyx_t_14 = -1;
-    if (__pyx_t_15 < 0) {
-      __pyx_t_15 += __pyx_pybuffernd_y.diminfo[0].shape;
-      if (unlikely(__pyx_t_15 < 0)) __pyx_t_14 = 0;
-    } else if (unlikely(__pyx_t_15 >= __pyx_pybuffernd_y.diminfo[0].shape)) __pyx_t_14 = 0;
-    if (unlikely(__pyx_t_14 != -1)) {
-      __Pyx_RaiseBufferIndexError(__pyx_t_14);
-      __PYX_ERR(0, 56, __pyx_L1_error)
+    __pyx_t_18 = (__pyx_v_i - 1);
+    __pyx_t_17 = -1;
+    if (__pyx_t_18 < 0) {
+      __pyx_t_18 += __pyx_pybuffernd_y.diminfo[0].shape;
+      if (unlikely(__pyx_t_18 < 0)) __pyx_t_17 = 0;
+    } else if (unlikely(__pyx_t_18 >= __pyx_pybuffernd_y.diminfo[0].shape)) __pyx_t_17 = 0;
+    if (unlikely(__pyx_t_17 != -1)) {
+      __Pyx_RaiseBufferIndexError(__pyx_t_17);
+      __PYX_ERR(0, 68, __pyx_L1_error)
     }
-    (__pyx_v_points[__pyx_v_i])->category = ((*__Pyx_BufPtrCContig1d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_15, __pyx_pybuffernd_y.diminfo[0].strides)) + 1);
+    (__pyx_v_points[__pyx_v_i])->category = ((*__Pyx_BufPtrCContig1d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_y.diminfo[0].strides)) + 1);
 
-    /* "sklearn_oblique_tree/oblique/_oblique.pyx":57
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":69
  *             points[i].dimension = (&X[i-1,0] - 1)
  *             points[i].category = y[i-1] + 1
  *             points[i].val = 0             # <<<<<<<<<<<<<<
@@ -2372,7 +2498,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(str
     (__pyx_v_points[__pyx_v_i])->val = 0.0;
   }
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":61
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":73
  * 
  * 
  *         sklearn_root_node = build_tree(points, num_points, NULL)             # <<<<<<<<<<<<<<
@@ -2384,7 +2510,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(str
   /* "sklearn_oblique_tree/oblique/_oblique.pyx":16
  *         deallocate_structures(no_of_train_points)
  * 
- *     cpdef fit(self, np.ndarray[np.float_t, ndim=2, mode="c"] X, numpy.ndarray[np.int_t, mode="c"] y, int number_of_restarts, int max_perturbations):             # <<<<<<<<<<<<<<
+ *     cpdef fit(self, np.ndarray[np.float_t, ndim=2, mode="c"] X, numpy.ndarray[np.int_t, mode="c"] y, long int random_state, str splitter, int number_of_restarts, int max_perturbations):             # <<<<<<<<<<<<<<
  *         """
  *         Grows an Oblique Decision Tree by calling sub-routines from Murphys implementation of OC1 and Cart-Linear
  */
@@ -2399,7 +2525,8 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(str
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_8);
+  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_9);
   { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
@@ -2425,18 +2552,24 @@ static char __pyx_doc_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_4fit[] = "
 static PyObject *__pyx_pw_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_5fit(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_X = 0;
   PyArrayObject *__pyx_v_y = 0;
+  long __pyx_v_random_state;
+  PyObject *__pyx_v_splitter = 0;
   int __pyx_v_number_of_restarts;
   int __pyx_v_max_perturbations;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("fit (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_X,&__pyx_n_s_y,&__pyx_n_s_number_of_restarts,&__pyx_n_s_max_perturbations,0};
-    PyObject* values[4] = {0,0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_X,&__pyx_n_s_y,&__pyx_n_s_random_state,&__pyx_n_s_splitter,&__pyx_n_s_number_of_restarts,&__pyx_n_s_max_perturbations,0};
+    PyObject* values[6] = {0,0,0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        CYTHON_FALLTHROUGH;
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
         case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         CYTHON_FALLTHROUGH;
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
@@ -2457,40 +2590,56 @@ static PyObject *__pyx_pw_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_5fit(P
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit", 1, 4, 4, 1); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("fit", 1, 6, 6, 1); __PYX_ERR(0, 16, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
-        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_number_of_restarts)) != 0)) kw_args--;
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_random_state)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit", 1, 4, 4, 2); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("fit", 1, 6, 6, 2); __PYX_ERR(0, 16, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
-        if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_max_perturbations)) != 0)) kw_args--;
+        if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_splitter)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("fit", 1, 4, 4, 3); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("fit", 1, 6, 6, 3); __PYX_ERR(0, 16, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  4:
+        if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_number_of_restarts)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit", 1, 6, 6, 4); __PYX_ERR(0, 16, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  5:
+        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_max_perturbations)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("fit", 1, 6, 6, 5); __PYX_ERR(0, 16, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "fit") < 0)) __PYX_ERR(0, 16, __pyx_L3_error)
       }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 6) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+      values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+      values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
     }
     __pyx_v_X = ((PyArrayObject *)values[0]);
     __pyx_v_y = ((PyArrayObject *)values[1]);
-    __pyx_v_number_of_restarts = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_number_of_restarts == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 16, __pyx_L3_error)
-    __pyx_v_max_perturbations = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_max_perturbations == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 16, __pyx_L3_error)
+    __pyx_v_random_state = __Pyx_PyInt_As_long(values[2]); if (unlikely((__pyx_v_random_state == (long)-1) && PyErr_Occurred())) __PYX_ERR(0, 16, __pyx_L3_error)
+    __pyx_v_splitter = ((PyObject*)values[3]);
+    __pyx_v_number_of_restarts = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_number_of_restarts == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 16, __pyx_L3_error)
+    __pyx_v_max_perturbations = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_max_perturbations == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 16, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("fit", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 16, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("fit", 1, 6, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 16, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("sklearn_oblique_tree.oblique._oblique.Tree.fit", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2498,7 +2647,8 @@ static PyObject *__pyx_pw_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_5fit(P
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 1, "X", 0))) __PYX_ERR(0, 16, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), __pyx_ptype_5numpy_ndarray, 1, "y", 0))) __PYX_ERR(0, 16, __pyx_L1_error)
-  __pyx_r = __pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_4fit(((struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *)__pyx_v_self), __pyx_v_X, __pyx_v_y, __pyx_v_number_of_restarts, __pyx_v_max_perturbations);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_splitter), (&PyString_Type), 1, "splitter", 1))) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_r = __pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_4fit(((struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *)__pyx_v_self), __pyx_v_X, __pyx_v_y, __pyx_v_random_state, __pyx_v_splitter, __pyx_v_number_of_restarts, __pyx_v_max_perturbations);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2509,7 +2659,7 @@ static PyObject *__pyx_pw_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_5fit(P
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_4fit(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, int __pyx_v_number_of_restarts, int __pyx_v_max_perturbations) {
+static PyObject *__pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_4fit(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *__pyx_v_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, long __pyx_v_random_state, PyObject *__pyx_v_splitter, int __pyx_v_number_of_restarts, int __pyx_v_max_perturbations) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_X;
   __Pyx_Buffer __pyx_pybuffer_X;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_y;
@@ -2537,7 +2687,7 @@ static PyObject *__pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_4fit(s
   }
   __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(__pyx_v_self, ((PyArrayObject *)__pyx_v_X), ((PyArrayObject *)__pyx_v_y), __pyx_v_number_of_restarts, __pyx_v_max_perturbations, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit(__pyx_v_self, ((PyArrayObject *)__pyx_v_X), ((PyArrayObject *)__pyx_v_y), __pyx_v_random_state, __pyx_v_splitter, __pyx_v_number_of_restarts, __pyx_v_max_perturbations, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2565,7 +2715,7 @@ static PyObject *__pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_4fit(s
   return __pyx_r;
 }
 
-/* "sklearn_oblique_tree/oblique/_oblique.pyx":66
+/* "sklearn_oblique_tree/oblique/_oblique.pyx":78
  * 
  * 
  *     cpdef predict(self, np.ndarray[np.float_t, ndim=2, mode="c"] X):             # <<<<<<<<<<<<<<
@@ -2610,7 +2760,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
   __pyx_pybuffernd_X.rcbuffer = &__pyx_pybuffer_X;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 66, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 78, __pyx_L1_error)
   }
   __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_X.diminfo[1].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_X.diminfo[1].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[1];
   /* Check if called by wrapper */
@@ -2623,7 +2773,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
     else {
       PY_UINT64_T type_dict_guard = (likely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dict)) ? __PYX_GET_DICT_VERSION(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dict) : 0;
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_predict); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_predict); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_7predict)) {
         __Pyx_XDECREF(__pyx_r);
@@ -2640,7 +2790,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, ((PyObject *)__pyx_v_X)) : __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_X));
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 66, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -2661,17 +2811,17 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
     #endif
   }
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":67
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":79
  * 
  *     cpdef predict(self, np.ndarray[np.float_t, ndim=2, mode="c"] X):
  *         cdef int num_predict_points = len(X)             # <<<<<<<<<<<<<<
  *         cdef int i
  *         cdef POINT ** points_predict = <POINT**> malloc(num_predict_points * sizeof(POINT*))
  */
-  __pyx_t_5 = PyObject_Length(((PyObject *)__pyx_v_X)); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(0, 67, __pyx_L1_error)
+  __pyx_t_5 = PyObject_Length(((PyObject *)__pyx_v_X)); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(0, 79, __pyx_L1_error)
   __pyx_v_num_predict_points = __pyx_t_5;
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":69
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":81
  *         cdef int num_predict_points = len(X)
  *         cdef int i
  *         cdef POINT ** points_predict = <POINT**> malloc(num_predict_points * sizeof(POINT*))             # <<<<<<<<<<<<<<
@@ -2680,46 +2830,46 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
  */
   __pyx_v_points_predict = ((POINT **)malloc((__pyx_v_num_predict_points * (sizeof(POINT *)))));
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":70
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":82
  *         cdef int i
  *         cdef POINT ** points_predict = <POINT**> malloc(num_predict_points * sizeof(POINT*))
  *         cdef np.ndarray[np.int32_t, ndim=1] predictions = np.empty(num_predict_points, dtype=np.int32)             # <<<<<<<<<<<<<<
  *         global sklearn_root_node
  *         points_predict -= 1 #implementation is indexed from 1.
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_num_predict_points); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_num_predict_points); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_int32); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_int32); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_6) < 0) __PYX_ERR(0, 70, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_6) < 0) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 82, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 70, __pyx_L1_error)
+  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 82, __pyx_L1_error)
   __pyx_t_7 = ((PyArrayObject *)__pyx_t_6);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_predictions.rcbuffer->pybuffer, (PyObject*)__pyx_t_7, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int32_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
       __pyx_v_predictions = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_predictions.rcbuffer->pybuffer.buf = NULL;
-      __PYX_ERR(0, 70, __pyx_L1_error)
+      __PYX_ERR(0, 82, __pyx_L1_error)
     } else {__pyx_pybuffernd_predictions.diminfo[0].strides = __pyx_pybuffernd_predictions.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_predictions.diminfo[0].shape = __pyx_pybuffernd_predictions.rcbuffer->pybuffer.shape[0];
     }
   }
@@ -2727,7 +2877,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
   __pyx_v_predictions = ((PyArrayObject *)__pyx_t_6);
   __pyx_t_6 = 0;
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":72
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":84
  *         cdef np.ndarray[np.int32_t, ndim=1] predictions = np.empty(num_predict_points, dtype=np.int32)
  *         global sklearn_root_node
  *         points_predict -= 1 #implementation is indexed from 1.             # <<<<<<<<<<<<<<
@@ -2736,7 +2886,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
  */
   __pyx_v_points_predict = (__pyx_v_points_predict - 1);
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":74
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":86
  *         points_predict -= 1 #implementation is indexed from 1.
  * 
  *         for i in range(1,num_predict_points+1):             # <<<<<<<<<<<<<<
@@ -2748,7 +2898,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
   for (__pyx_t_10 = 1; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
     __pyx_v_i = __pyx_t_10;
 
-    /* "sklearn_oblique_tree/oblique/_oblique.pyx":75
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":87
  * 
  *         for i in range(1,num_predict_points+1):
  *             points_predict[i] = <POINT * > malloc( sizeof(POINT *))             # <<<<<<<<<<<<<<
@@ -2758,7 +2908,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
     (__pyx_v_points_predict[__pyx_v_i]) = ((POINT *)malloc((sizeof(POINT *))));
   }
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":77
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":89
  *             points_predict[i] = <POINT * > malloc( sizeof(POINT *))
  * 
  *         for i in range(1,num_predict_points+1):             # <<<<<<<<<<<<<<
@@ -2770,7 +2920,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
   for (__pyx_t_10 = 1; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
     __pyx_v_i = __pyx_t_10;
 
-    /* "sklearn_oblique_tree/oblique/_oblique.pyx":78
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":90
  * 
  *         for i in range(1,num_predict_points+1):
  *             points_predict[i].dimension = (&X[i-1,0] - 1)             # <<<<<<<<<<<<<<
@@ -2790,11 +2940,11 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
     } else if (unlikely(__pyx_t_12 >= __pyx_pybuffernd_X.diminfo[1].shape)) __pyx_t_13 = 1;
     if (unlikely(__pyx_t_13 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_13);
-      __PYX_ERR(0, 78, __pyx_L1_error)
+      __PYX_ERR(0, 90, __pyx_L1_error)
     }
     (__pyx_v_points_predict[__pyx_v_i])->dimension = ((&(*__Pyx_BufPtrCContig2d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_11, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_12, __pyx_pybuffernd_X.diminfo[1].strides))) - 1);
 
-    /* "sklearn_oblique_tree/oblique/_oblique.pyx":79
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":91
  *         for i in range(1,num_predict_points+1):
  *             points_predict[i].dimension = (&X[i-1,0] - 1)
  *             points_predict[i].category = -1             # <<<<<<<<<<<<<<
@@ -2803,7 +2953,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
  */
     (__pyx_v_points_predict[__pyx_v_i])->category = -1;
 
-    /* "sklearn_oblique_tree/oblique/_oblique.pyx":80
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":92
  *             points_predict[i].dimension = (&X[i-1,0] - 1)
  *             points_predict[i].category = -1
  *             points_predict[i].val = 0             # <<<<<<<<<<<<<<
@@ -2813,7 +2963,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
     (__pyx_v_points_predict[__pyx_v_i])->val = 0.0;
   }
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":83
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":95
  * 
  * 
  *         classify(points_predict, num_predict_points, sklearn_root_node, NULL)             # <<<<<<<<<<<<<<
@@ -2822,7 +2972,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
  */
   classify(__pyx_v_points_predict, __pyx_v_num_predict_points, sklearn_root_node, NULL);
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":85
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":97
  *         classify(points_predict, num_predict_points, sklearn_root_node, NULL)
  * 
  *         for i in range(1,num_predict_points+1):             # <<<<<<<<<<<<<<
@@ -2834,7 +2984,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
   for (__pyx_t_10 = 1; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
     __pyx_v_i = __pyx_t_10;
 
-    /* "sklearn_oblique_tree/oblique/_oblique.pyx":86
+    /* "sklearn_oblique_tree/oblique/_oblique.pyx":98
  * 
  *         for i in range(1,num_predict_points+1):
  *             predictions[i-1] = points_predict[i].category - 1 #decrement to account for increment in train             # <<<<<<<<<<<<<<
@@ -2849,12 +2999,12 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
     } else if (unlikely(__pyx_t_14 >= __pyx_pybuffernd_predictions.diminfo[0].shape)) __pyx_t_13 = 0;
     if (unlikely(__pyx_t_13 != -1)) {
       __Pyx_RaiseBufferIndexError(__pyx_t_13);
-      __PYX_ERR(0, 86, __pyx_L1_error)
+      __PYX_ERR(0, 98, __pyx_L1_error)
     }
     *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_int32_t *, __pyx_pybuffernd_predictions.rcbuffer->pybuffer.buf, __pyx_t_14, __pyx_pybuffernd_predictions.diminfo[0].strides) = ((__pyx_v_points_predict[__pyx_v_i])->category - 1);
   }
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":88
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":100
  *             predictions[i-1] = points_predict[i].category - 1 #decrement to account for increment in train
  * 
  *         return predictions             # <<<<<<<<<<<<<<
@@ -2866,7 +3016,7 @@ static PyObject *__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict
   __pyx_r = ((PyObject *)__pyx_v_predictions);
   goto __pyx_L0;
 
-  /* "sklearn_oblique_tree/oblique/_oblique.pyx":66
+  /* "sklearn_oblique_tree/oblique/_oblique.pyx":78
  * 
  * 
  *     cpdef predict(self, np.ndarray[np.float_t, ndim=2, mode="c"] X):             # <<<<<<<<<<<<<<
@@ -2907,7 +3057,7 @@ static PyObject *__pyx_pw_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_7predi
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("predict (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 1, "X", 0))) __PYX_ERR(0, 66, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 1, "X", 0))) __PYX_ERR(0, 78, __pyx_L1_error)
   __pyx_r = __pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_6predict(((struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *)__pyx_v_self), ((PyArrayObject *)__pyx_v_X));
 
   /* function exit code */
@@ -2932,11 +3082,11 @@ static PyObject *__pyx_pf_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_6predi
   __pyx_pybuffernd_X.rcbuffer = &__pyx_pybuffer_X;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 66, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 78, __pyx_L1_error)
   }
   __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_X.diminfo[1].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_X.diminfo[1].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[1];
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict(__pyx_v_self, ((PyArrayObject *)__pyx_v_X), 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict(__pyx_v_self, ((PyArrayObject *)__pyx_v_X), 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5647,11 +5797,11 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_n_s_X, __pyx_k_X, sizeof(__pyx_k_X), 0, 0, 1, 1},
+  {&__pyx_n_s_axis_parallel, __pyx_k_axis_parallel, sizeof(__pyx_k_axis_parallel), 0, 0, 1, 1},
+  {&__pyx_n_s_cart, __pyx_k_cart, sizeof(__pyx_k_cart), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_dtype, __pyx_k_dtype, sizeof(__pyx_k_dtype), 0, 0, 1, 1},
   {&__pyx_n_s_empty, __pyx_k_empty, sizeof(__pyx_k_empty), 0, 0, 1, 1},
-  {&__pyx_n_s_end, __pyx_k_end, sizeof(__pyx_k_end), 0, 0, 1, 1},
-  {&__pyx_n_s_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 0, 1, 1},
   {&__pyx_n_s_fit, __pyx_k_fit, sizeof(__pyx_k_fit), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
@@ -5667,9 +5817,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_kp_s_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 0, 1, 0},
   {&__pyx_kp_s_numpy_core_umath_failed_to_impor, __pyx_k_numpy_core_umath_failed_to_impor, sizeof(__pyx_k_numpy_core_umath_failed_to_impor), 0, 0, 1, 0},
+  {&__pyx_n_s_oc1, __pyx_k_oc1, sizeof(__pyx_k_oc1), 0, 0, 1, 1},
   {&__pyx_n_s_predict, __pyx_k_predict, sizeof(__pyx_k_predict), 0, 0, 1, 1},
-  {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
+  {&__pyx_n_s_random_state, __pyx_k_random_state, sizeof(__pyx_k_random_state), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_reduce, __pyx_k_reduce, sizeof(__pyx_k_reduce), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_cython, __pyx_k_reduce_cython, sizeof(__pyx_k_reduce_cython), 0, 0, 1, 1},
@@ -5684,7 +5835,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 63, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(2, 272, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(2, 856, __pyx_L1_error)
@@ -5844,7 +5995,7 @@ static int __Pyx_modinit_type_init_code(void) {
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
   __pyx_vtabptr_20sklearn_oblique_tree_7oblique_8_oblique_Tree = &__pyx_vtable_20sklearn_oblique_tree_7oblique_8_oblique_Tree;
-  __pyx_vtable_20sklearn_oblique_tree_7oblique_8_oblique_Tree.fit = (PyObject *(*)(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *, PyArrayObject *, PyArrayObject *, int, int, int __pyx_skip_dispatch))__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit;
+  __pyx_vtable_20sklearn_oblique_tree_7oblique_8_oblique_Tree.fit = (PyObject *(*)(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *, PyArrayObject *, PyArrayObject *, long, PyObject *, int, int, int __pyx_skip_dispatch))__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_fit;
   __pyx_vtable_20sklearn_oblique_tree_7oblique_8_oblique_Tree.predict = (PyObject *(*)(struct __pyx_obj_20sklearn_oblique_tree_7oblique_8_oblique_Tree *, PyArrayObject *, int __pyx_skip_dispatch))__pyx_f_20sklearn_oblique_tree_7oblique_8_oblique_4Tree_predict;
   if (PyType_Ready(&__pyx_type_20sklearn_oblique_tree_7oblique_8_oblique_Tree) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
   __pyx_type_20sklearn_oblique_tree_7oblique_8_oblique_Tree.tp_print = 0;
@@ -6114,7 +6265,7 @@ if (!__Pyx_RefNanny) {
   #endif
 
   /* "sklearn_oblique_tree/oblique/_oblique.pyx":3
- * from _oblique cimport build_tree #Struct for an oblique tree node with references to children
+ * from _oblique cimport build_tree, srand48 #Struct for an oblique tree node with references to children
  * from libc.stdio cimport printf
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as np
@@ -6126,7 +6277,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "sklearn_oblique_tree/oblique/_oblique.pyx":1
- * from _oblique cimport build_tree #Struct for an oblique tree node with references to children             # <<<<<<<<<<<<<<
+ * from _oblique cimport build_tree, srand48 #Struct for an oblique tree node with references to children             # <<<<<<<<<<<<<<
  * from libc.stdio cimport printf
  * import numpy as np
  */
@@ -8230,37 +8381,6 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
     }
 
 /* CIntToPy */
-  static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
-    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(int) < sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(int) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
-            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
-#endif
-        }
-    } else {
-        if (sizeof(int) <= sizeof(long)) {
-            return PyInt_FromLong((long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
-            return PyLong_FromLongLong((PY_LONG_LONG) value);
-#endif
-        }
-    }
-    {
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(int),
-                                     little, !is_unsigned);
-    }
-}
-
-/* CIntToPy */
   static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
     const long neg_one = (long) ((long) 0 - (long) 1), const_zero = (long) 0;
     const int is_unsigned = neg_one > const_zero;
@@ -8291,111 +8411,36 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
     }
 }
 
-/* Print */
-  #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
-static PyObject *__Pyx_GetStdout(void) {
-    PyObject *f = PySys_GetObject((char *)"stdout");
-    if (!f) {
-        PyErr_SetString(PyExc_RuntimeError, "lost sys.stdout");
-    }
-    return f;
-}
-static int __Pyx_Print(PyObject* f, PyObject *arg_tuple, int newline) {
-    int i;
-    if (!f) {
-        if (!(f = __Pyx_GetStdout()))
-            return -1;
-    }
-    Py_INCREF(f);
-    for (i=0; i < PyTuple_GET_SIZE(arg_tuple); i++) {
-        PyObject* v;
-        if (PyFile_SoftSpace(f, 1)) {
-            if (PyFile_WriteString(" ", f) < 0)
-                goto error;
-        }
-        v = PyTuple_GET_ITEM(arg_tuple, i);
-        if (PyFile_WriteObject(v, f, Py_PRINT_RAW) < 0)
-            goto error;
-        if (PyString_Check(v)) {
-            char *s = PyString_AsString(v);
-            Py_ssize_t len = PyString_Size(v);
-            if (len > 0) {
-                switch (s[len-1]) {
-                    case ' ': break;
-                    case '\f': case '\r': case '\n': case '\t': case '\v':
-                        PyFile_SoftSpace(f, 0);
-                        break;
-                    default:  break;
-                }
-            }
-        }
-    }
-    if (newline) {
-        if (PyFile_WriteString("\n", f) < 0)
-            goto error;
-        PyFile_SoftSpace(f, 0);
-    }
-    Py_DECREF(f);
-    return 0;
-error:
-    Py_DECREF(f);
-    return -1;
-}
-#else
-static int __Pyx_Print(PyObject* stream, PyObject *arg_tuple, int newline) {
-    PyObject* kwargs = 0;
-    PyObject* result = 0;
-    PyObject* end_string;
-    if (unlikely(!__pyx_print)) {
-        __pyx_print = PyObject_GetAttr(__pyx_b, __pyx_n_s_print);
-        if (!__pyx_print)
-            return -1;
-    }
-    if (stream) {
-        kwargs = PyDict_New();
-        if (unlikely(!kwargs))
-            return -1;
-        if (unlikely(PyDict_SetItem(kwargs, __pyx_n_s_file, stream) < 0))
-            goto bad;
-        if (!newline) {
-            end_string = PyUnicode_FromStringAndSize(" ", 1);
-            if (unlikely(!end_string))
-                goto bad;
-            if (PyDict_SetItem(kwargs, __pyx_n_s_end, end_string) < 0) {
-                Py_DECREF(end_string);
-                goto bad;
-            }
-            Py_DECREF(end_string);
-        }
-    } else if (!newline) {
-        if (unlikely(!__pyx_print_kwargs)) {
-            __pyx_print_kwargs = PyDict_New();
-            if (unlikely(!__pyx_print_kwargs))
-                return -1;
-            end_string = PyUnicode_FromStringAndSize(" ", 1);
-            if (unlikely(!end_string))
-                return -1;
-            if (PyDict_SetItem(__pyx_print_kwargs, __pyx_n_s_end, end_string) < 0) {
-                Py_DECREF(end_string);
-                return -1;
-            }
-            Py_DECREF(end_string);
-        }
-        kwargs = __pyx_print_kwargs;
-    }
-    result = PyObject_Call(__pyx_print, arg_tuple, kwargs);
-    if (unlikely(kwargs) && (kwargs != __pyx_print_kwargs))
-        Py_DECREF(kwargs);
-    if (!result)
-        return -1;
-    Py_DECREF(result);
-    return 0;
-bad:
-    if (kwargs != __pyx_print_kwargs)
-        Py_XDECREF(kwargs);
-    return -1;
-}
+/* CIntToPy */
+  static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
+    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(int) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(int) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
 #endif
+        }
+    } else {
+        if (sizeof(int) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+#endif
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(int),
+                                     little, !is_unsigned);
+    }
+}
 
 /* Declarations */
   #if CYTHON_CCOMPLEX
@@ -8739,232 +8784,6 @@ bad:
 }
 
 /* CIntFromPy */
-  static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
-    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
-    const int is_unsigned = neg_one > const_zero;
-#if PY_MAJOR_VERSION < 3
-    if (likely(PyInt_Check(x))) {
-        if (sizeof(int) < sizeof(long)) {
-            __PYX_VERIFY_RETURN_INT(int, long, PyInt_AS_LONG(x))
-        } else {
-            long val = PyInt_AS_LONG(x);
-            if (is_unsigned && unlikely(val < 0)) {
-                goto raise_neg_overflow;
-            }
-            return (int) val;
-        }
-    } else
-#endif
-    if (likely(PyLong_Check(x))) {
-        if (is_unsigned) {
-#if CYTHON_USE_PYLONG_INTERNALS
-            const digit* digits = ((PyLongObject*)x)->ob_digit;
-            switch (Py_SIZE(x)) {
-                case  0: return (int) 0;
-                case  1: __PYX_VERIFY_RETURN_INT(int, digit, digits[0])
-                case 2:
-                    if (8 * sizeof(int) > 1 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) >= 2 * PyLong_SHIFT) {
-                            return (int) (((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
-                        }
-                    }
-                    break;
-                case 3:
-                    if (8 * sizeof(int) > 2 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) >= 3 * PyLong_SHIFT) {
-                            return (int) (((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
-                        }
-                    }
-                    break;
-                case 4:
-                    if (8 * sizeof(int) > 3 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) >= 4 * PyLong_SHIFT) {
-                            return (int) (((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
-                        }
-                    }
-                    break;
-            }
-#endif
-#if CYTHON_COMPILING_IN_CPYTHON
-            if (unlikely(Py_SIZE(x) < 0)) {
-                goto raise_neg_overflow;
-            }
-#else
-            {
-                int result = PyObject_RichCompareBool(x, Py_False, Py_LT);
-                if (unlikely(result < 0))
-                    return (int) -1;
-                if (unlikely(result == 1))
-                    goto raise_neg_overflow;
-            }
-#endif
-            if (sizeof(int) <= sizeof(unsigned long)) {
-                __PYX_VERIFY_RETURN_INT_EXC(int, unsigned long, PyLong_AsUnsignedLong(x))
-#ifdef HAVE_LONG_LONG
-            } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
-                __PYX_VERIFY_RETURN_INT_EXC(int, unsigned PY_LONG_LONG, PyLong_AsUnsignedLongLong(x))
-#endif
-            }
-        } else {
-#if CYTHON_USE_PYLONG_INTERNALS
-            const digit* digits = ((PyLongObject*)x)->ob_digit;
-            switch (Py_SIZE(x)) {
-                case  0: return (int) 0;
-                case -1: __PYX_VERIFY_RETURN_INT(int, sdigit, (sdigit) (-(sdigit)digits[0]))
-                case  1: __PYX_VERIFY_RETURN_INT(int,  digit, +digits[0])
-                case -2:
-                    if (8 * sizeof(int) - 1 > 1 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
-                            return (int) (((int)-1)*(((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-                case 2:
-                    if (8 * sizeof(int) > 1 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
-                            return (int) ((((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-                case -3:
-                    if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
-                            return (int) (((int)-1)*(((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-                case 3:
-                    if (8 * sizeof(int) > 2 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
-                            return (int) ((((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-                case -4:
-                    if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 4 * PyLong_SHIFT) {
-                            return (int) (((int)-1)*(((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-                case 4:
-                    if (8 * sizeof(int) > 3 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(int) - 1 > 4 * PyLong_SHIFT) {
-                            return (int) ((((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
-                        }
-                    }
-                    break;
-            }
-#endif
-            if (sizeof(int) <= sizeof(long)) {
-                __PYX_VERIFY_RETURN_INT_EXC(int, long, PyLong_AsLong(x))
-#ifdef HAVE_LONG_LONG
-            } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
-                __PYX_VERIFY_RETURN_INT_EXC(int, PY_LONG_LONG, PyLong_AsLongLong(x))
-#endif
-            }
-        }
-        {
-#if CYTHON_COMPILING_IN_PYPY && !defined(_PyLong_AsByteArray)
-            PyErr_SetString(PyExc_RuntimeError,
-                            "_PyLong_AsByteArray() not available in PyPy, cannot convert large numbers");
-#else
-            int val;
-            PyObject *v = __Pyx_PyNumber_IntOrLong(x);
- #if PY_MAJOR_VERSION < 3
-            if (likely(v) && !PyLong_Check(v)) {
-                PyObject *tmp = v;
-                v = PyNumber_Long(tmp);
-                Py_DECREF(tmp);
-            }
- #endif
-            if (likely(v)) {
-                int one = 1; int is_little = (int)*(unsigned char *)&one;
-                unsigned char *bytes = (unsigned char *)&val;
-                int ret = _PyLong_AsByteArray((PyLongObject *)v,
-                                              bytes, sizeof(val),
-                                              is_little, !is_unsigned);
-                Py_DECREF(v);
-                if (likely(!ret))
-                    return val;
-            }
-#endif
-            return (int) -1;
-        }
-    } else {
-        int val;
-        PyObject *tmp = __Pyx_PyNumber_IntOrLong(x);
-        if (!tmp) return (int) -1;
-        val = __Pyx_PyInt_As_int(tmp);
-        Py_DECREF(tmp);
-        return val;
-    }
-raise_overflow:
-    PyErr_SetString(PyExc_OverflowError,
-        "value too large to convert to int");
-    return (int) -1;
-raise_neg_overflow:
-    PyErr_SetString(PyExc_OverflowError,
-        "can't convert negative value to int");
-    return (int) -1;
-}
-
-/* PrintOne */
-  #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
-static int __Pyx_PrintOne(PyObject* f, PyObject *o) {
-    if (!f) {
-        if (!(f = __Pyx_GetStdout()))
-            return -1;
-    }
-    Py_INCREF(f);
-    if (PyFile_SoftSpace(f, 0)) {
-        if (PyFile_WriteString(" ", f) < 0)
-            goto error;
-    }
-    if (PyFile_WriteObject(o, f, Py_PRINT_RAW) < 0)
-        goto error;
-    if (PyFile_WriteString("\n", f) < 0)
-        goto error;
-    Py_DECREF(f);
-    return 0;
-error:
-    Py_DECREF(f);
-    return -1;
-    /* the line below is just to avoid C compiler
-     * warnings about unused functions */
-    return __Pyx_Print(f, NULL, 0);
-}
-#else
-static int __Pyx_PrintOne(PyObject* stream, PyObject *o) {
-    int res;
-    PyObject* arg_tuple = PyTuple_Pack(1, o);
-    if (unlikely(!arg_tuple))
-        return -1;
-    res = __Pyx_Print(stream, arg_tuple, 1);
-    Py_DECREF(arg_tuple);
-    return res;
-}
-#endif
-
-/* CIntFromPy */
   static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *x) {
     const long neg_one = (long) ((long) 0 - (long) 1), const_zero = (long) 0;
     const int is_unsigned = neg_one > const_zero;
@@ -9151,6 +8970,195 @@ raise_neg_overflow:
     PyErr_SetString(PyExc_OverflowError,
         "can't convert negative value to long");
     return (long) -1;
+}
+
+/* CIntFromPy */
+  static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
+    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
+    const int is_unsigned = neg_one > const_zero;
+#if PY_MAJOR_VERSION < 3
+    if (likely(PyInt_Check(x))) {
+        if (sizeof(int) < sizeof(long)) {
+            __PYX_VERIFY_RETURN_INT(int, long, PyInt_AS_LONG(x))
+        } else {
+            long val = PyInt_AS_LONG(x);
+            if (is_unsigned && unlikely(val < 0)) {
+                goto raise_neg_overflow;
+            }
+            return (int) val;
+        }
+    } else
+#endif
+    if (likely(PyLong_Check(x))) {
+        if (is_unsigned) {
+#if CYTHON_USE_PYLONG_INTERNALS
+            const digit* digits = ((PyLongObject*)x)->ob_digit;
+            switch (Py_SIZE(x)) {
+                case  0: return (int) 0;
+                case  1: __PYX_VERIFY_RETURN_INT(int, digit, digits[0])
+                case 2:
+                    if (8 * sizeof(int) > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) >= 2 * PyLong_SHIFT) {
+                            return (int) (((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
+                        }
+                    }
+                    break;
+                case 3:
+                    if (8 * sizeof(int) > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) >= 3 * PyLong_SHIFT) {
+                            return (int) (((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
+                        }
+                    }
+                    break;
+                case 4:
+                    if (8 * sizeof(int) > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) >= 4 * PyLong_SHIFT) {
+                            return (int) (((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0]));
+                        }
+                    }
+                    break;
+            }
+#endif
+#if CYTHON_COMPILING_IN_CPYTHON
+            if (unlikely(Py_SIZE(x) < 0)) {
+                goto raise_neg_overflow;
+            }
+#else
+            {
+                int result = PyObject_RichCompareBool(x, Py_False, Py_LT);
+                if (unlikely(result < 0))
+                    return (int) -1;
+                if (unlikely(result == 1))
+                    goto raise_neg_overflow;
+            }
+#endif
+            if (sizeof(int) <= sizeof(unsigned long)) {
+                __PYX_VERIFY_RETURN_INT_EXC(int, unsigned long, PyLong_AsUnsignedLong(x))
+#ifdef HAVE_LONG_LONG
+            } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
+                __PYX_VERIFY_RETURN_INT_EXC(int, unsigned PY_LONG_LONG, PyLong_AsUnsignedLongLong(x))
+#endif
+            }
+        } else {
+#if CYTHON_USE_PYLONG_INTERNALS
+            const digit* digits = ((PyLongObject*)x)->ob_digit;
+            switch (Py_SIZE(x)) {
+                case  0: return (int) 0;
+                case -1: __PYX_VERIFY_RETURN_INT(int, sdigit, (sdigit) (-(sdigit)digits[0]))
+                case  1: __PYX_VERIFY_RETURN_INT(int,  digit, +digits[0])
+                case -2:
+                    if (8 * sizeof(int) - 1 > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
+                            return (int) (((int)-1)*(((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+                case 2:
+                    if (8 * sizeof(int) > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
+                            return (int) ((((((int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+                case -3:
+                    if (8 * sizeof(int) - 1 > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
+                            return (int) (((int)-1)*(((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+                case 3:
+                    if (8 * sizeof(int) > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
+                            return (int) ((((((((int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+                case -4:
+                    if (8 * sizeof(int) - 1 > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, long, -(long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 4 * PyLong_SHIFT) {
+                            return (int) (((int)-1)*(((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+                case 4:
+                    if (8 * sizeof(int) > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(int, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(int) - 1 > 4 * PyLong_SHIFT) {
+                            return (int) ((((((((((int)digits[3]) << PyLong_SHIFT) | (int)digits[2]) << PyLong_SHIFT) | (int)digits[1]) << PyLong_SHIFT) | (int)digits[0])));
+                        }
+                    }
+                    break;
+            }
+#endif
+            if (sizeof(int) <= sizeof(long)) {
+                __PYX_VERIFY_RETURN_INT_EXC(int, long, PyLong_AsLong(x))
+#ifdef HAVE_LONG_LONG
+            } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
+                __PYX_VERIFY_RETURN_INT_EXC(int, PY_LONG_LONG, PyLong_AsLongLong(x))
+#endif
+            }
+        }
+        {
+#if CYTHON_COMPILING_IN_PYPY && !defined(_PyLong_AsByteArray)
+            PyErr_SetString(PyExc_RuntimeError,
+                            "_PyLong_AsByteArray() not available in PyPy, cannot convert large numbers");
+#else
+            int val;
+            PyObject *v = __Pyx_PyNumber_IntOrLong(x);
+ #if PY_MAJOR_VERSION < 3
+            if (likely(v) && !PyLong_Check(v)) {
+                PyObject *tmp = v;
+                v = PyNumber_Long(tmp);
+                Py_DECREF(tmp);
+            }
+ #endif
+            if (likely(v)) {
+                int one = 1; int is_little = (int)*(unsigned char *)&one;
+                unsigned char *bytes = (unsigned char *)&val;
+                int ret = _PyLong_AsByteArray((PyLongObject *)v,
+                                              bytes, sizeof(val),
+                                              is_little, !is_unsigned);
+                Py_DECREF(v);
+                if (likely(!ret))
+                    return val;
+            }
+#endif
+            return (int) -1;
+        }
+    } else {
+        int val;
+        PyObject *tmp = __Pyx_PyNumber_IntOrLong(x);
+        if (!tmp) return (int) -1;
+        val = __Pyx_PyInt_As_int(tmp);
+        Py_DECREF(tmp);
+        return val;
+    }
+raise_overflow:
+    PyErr_SetString(PyExc_OverflowError,
+        "value too large to convert to int");
+    return (int) -1;
+raise_neg_overflow:
+    PyErr_SetString(PyExc_OverflowError,
+        "can't convert negative value to int");
+    return (int) -1;
 }
 
 /* FastTypeChecks */

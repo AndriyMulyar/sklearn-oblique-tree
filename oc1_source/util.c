@@ -85,7 +85,6 @@ double myrandom(above,below)
      double above,below;
 {
   double drand48();
-  double seed48();
   
   return ((double)(above + drand48() * (below - above)));
 }

@@ -43,7 +43,7 @@ int no_of_dimensions = 0, no_of_coeffs, no_of_categories = 0;
 int no_of_restarts = 20, no_of_folds = 0;
 int normalize = TRUE;
 int unlabeled = FALSE, verbose = FALSE, veryverbose = FALSE;
-int order_of_perturbation = SEQUENTIAL;
+int order_of_perturbation = BEST_FIRST;
 int oblique = TRUE;
 int axis_parallel = TRUE;
 int cart_mode = FALSE;
@@ -444,7 +444,6 @@ char * dt_file; {
   struct test_outcome result;
   struct tree_node * proot;
   int i, j, k, no_of_ptest_points, no_of_train_points;
-
   /* initialize the animation file */
   if (strlen(animation_file) && no_of_dimensions == 2 && no_of_folds == 0) {
     animationfile = fopen(animation_file, "w");

@@ -11,22 +11,25 @@ class TestObliqueTree(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.classifier = ObliqueTree(splitter="oc1")
+        cls.classifier = ObliqueTree
+        cls.random_state = 3
 
 
     def test_iris(self):
-        X_train, X_test, y_train, y_test = train_test_split(*load_iris(return_X_y=True), test_size=.4)
-        self.classifier.fit(X_train, y_train)
+        classifier = self.classifier(splitter="oc1, axis_parallel", random_state = self.random_state)
+        X_train, X_test, y_train, y_test = train_test_split(*load_iris(return_X_y=True), test_size=.4, random_state=self.random_state)
+        classifier.fit(X_train, y_train)
 
-        predictions = self.classifier.predict(X_test)
+        predictions = classifier.predict(X_test)
 
 
         print("Iris Accuracy:",accuracy_score(y_test, predictions))
 
     def test_breast(self):
-        X_train, X_test, y_train, y_test = train_test_split(*load_breast_cancer(return_X_y=True), test_size=.4)
-        self.classifier.fit(X_train, y_train)
-        predictions = self.classifier.predict(X_test)
+        classifier = self.classifier(splitter="oc1, axis_parallel", random_state=self.random_state)
+        X_train, X_test, y_train, y_test = train_test_split(*load_breast_cancer(return_X_y=True), test_size=.4, random_state=self.random_state)
+        classifier.fit(X_train, y_train)
+        predictions = classifier.predict(X_test)
 
 
         print("Breast Cancer Accuracy:", accuracy_score(y_test, predictions))

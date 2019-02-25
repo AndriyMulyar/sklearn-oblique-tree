@@ -1,6 +1,10 @@
 import numpy
 cimport numpy
 
+cdef extern from "stdio.h":
+    double drand48()
+    void srand48(long int seedval)
+
 cdef extern from "../../oc1_source/mktree.c":
 
     struct tree_node:
@@ -26,6 +30,11 @@ cdef extern from "../../oc1_source/mktree.c":
     cdef int no_of_train_points
     cdef int max_no_of_random_perturbations
 
+    cdef int oblique
+    cdef int axis_parallel
+    cdef int cart_mode
+
+
     cdef tree_node* sklearn_root_node
 
     cdef float IMPURITY "IMPURITY"
@@ -45,5 +54,5 @@ cdef extern from "../../oc1_source/mktree.c":
 
 cdef class Tree:
     cpdef str splitter
-    cpdef fit(self, numpy.ndarray[numpy.float_t, ndim=2, mode="c"] X, numpy.ndarray[numpy.int_t, mode="c"] y, int number_of_restarts, int max_perturbations)
+    cpdef fit(self, numpy.ndarray[numpy.float_t, ndim=2, mode="c"] X, numpy.ndarray[numpy.int_t, mode="c"] y, long int random_state, str splitter,  int number_of_restarts, int max_perturbations)
     cpdef predict(self, numpy.ndarray y)

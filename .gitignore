@@ -173,3 +173,4 @@ fabric.properties
 *.egg-info
 *.eggs/
 venv/
+cython_debug/

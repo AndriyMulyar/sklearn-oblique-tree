@@ -1,4 +1,4 @@
-from _oblique cimport build_tree #Struct for an oblique tree node with references to children
+from _oblique cimport build_tree, srand48 #Struct for an oblique tree node with references to children
 from libc.stdio cimport printf
 import numpy as np
 cimport numpy as np
@@ -13,7 +13,7 @@ cdef class Tree:
         global no_of_train_points
         deallocate_structures(no_of_train_points)
 
-    cpdef fit(self, np.ndarray[np.float_t, ndim=2, mode="c"] X, numpy.ndarray[np.int_t, mode="c"] y, int number_of_restarts, int max_perturbations):
+    cpdef fit(self, np.ndarray[np.float_t, ndim=2, mode="c"] X, numpy.ndarray[np.int_t, mode="c"] y, long int random_state, str splitter, int number_of_restarts, int max_perturbations):
         """
         Grows an Oblique Decision Tree by calling sub-routines from Murphys implementation of OC1 and Cart-Linear
         :param X:
@@ -29,6 +29,22 @@ cdef class Tree:
         global sklearn_root_node #point to root node of tree to build
         global no_of_restarts
         global max_no_of_random_perturbations
+        global oblique
+        global axis_parallel
+        global cart_mode
+        oblique = False
+        axis_parallel = False
+        cart_mode = False
+
+        if "oc1" in splitter:
+            oblique = True
+        if "cart" in splitter: #if this is set, the implementation overrides the other splitters.
+            cart_mode = True
+        if "axis_parallel" in splitter:
+            axis_parallel = True
+
+
+        srand48(random_state) #set random state
 
         max_no_of_random_perturbations = max_perturbations
         no_of_train_points = num_points
@@ -41,15 +57,11 @@ cdef class Tree:
         cdef POINT ** points = <POINT**> malloc(num_points * sizeof(POINT*))
         allocate_structures(num_points)
 
-        #implementation is index from 1 like why the hell.
+        #implementation is indexed from 1 like why the hell.
         points -= 1
 
         for i in range(1,num_points+1):
             points[i] = <POINT * > malloc( sizeof(POINT *))
-
-
-
-        print(self.splitter)
 
         for i in range(1,num_points+1):
             points[i].dimension = (&X[i-1,0] - 1)
