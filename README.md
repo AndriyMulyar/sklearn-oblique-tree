@@ -7,10 +7,10 @@ A python interface to oblique decision tree implementations:
 
 # Installation
 
-First install `cython` and `numpy` with:
+First install `numpy` with:
 
 ```
-pip install cython numpy
+pip install numpy
 ```
 
 then run:
@@ -29,8 +29,16 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn_oblique_tree.oblique import ObliqueTree
 
-random_state = 1
+random_state = 2
 
+#see Murthy, et all for details.
+#For oblique with consideration of axis parallel
+#tree = ObliqueTree(splitter="oc1, axis_parallel", number_of_restarts=20, max_perturbations=5, random_state=random_state)
+#
+#For multivariate CART select 'cart' splitter
+#tree = ObliqueTree(splitter="cart", number_of_restarts=20, max_perturbations=5, random_state=random_state)
+
+#consider only oblique splits
 tree = ObliqueTree(splitter="oc1", number_of_restarts=20, max_perturbations=5, random_state=random_state)
 
 X_train, X_test, y_train, y_test = train_test_split(*load_iris(return_X_y=True), test_size=.4, random_state=random_state)
