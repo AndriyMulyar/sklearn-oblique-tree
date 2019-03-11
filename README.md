@@ -5,9 +5,9 @@ A python interface to oblique decision tree implementations:
 - CART-Linear Combinations (Breiman et al, 1984, Chapter 5)
 
 
-# Installation
+# Installation (Python 3)
 
-First install `numpy` with:
+First install pyth `numpy` with:
 
 ```
 pip install numpy
@@ -18,6 +18,7 @@ then run:
 ```
 pip install git+https://github.com/AndriyMulyar/sklearn-oblique-tree
 ```
+
 
 # Use
 
