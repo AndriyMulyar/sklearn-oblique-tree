@@ -7,7 +7,7 @@ A python interface to oblique decision tree implementations:
 
 # Installation (Python 3)
 
-First install pyth `numpy` with:
+First install `numpy` with:
 
 ```
 pip install numpy
