@@ -55,3 +55,6 @@ print("Iris Accuracy:",accuracy_score(y_test, predictions))
 # Acknowledgements
 VCU Imbalanced Learning and Data Stream Mining Laboratory     ![alt text](https://nlp.cs.vcu.edu/images/vcu_head_logo "VCU")
 
+
+# Original (unmodified) OC1 Source Code
+https://github.com/AndriyMulyar/sklearn-oblique-tree/tree/412d502c04d66046388e469a329d8bcf195bf34b/oc1_implementation
