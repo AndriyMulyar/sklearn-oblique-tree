@@ -65,10 +65,10 @@ def get_results(train_x, train_y, test_x, test_y, classifiers):
         cls.fit(train_x, train_y)
 
         # Build an decision tree as surrogate model
-        # model_dt = DecisionTreeClassifier(criterion='entropy', max_depth=3)
+        model_dt = DecisionTreeClassifier(criterion='entropy', max_depth=10)
 
         # Build an oblique decision tree OC1
-        tree = ObliqueTree(splitter="oc1", number_of_restarts=10, max_perturbations=5, random_state=random_state)
+        # tree = ObliqueTree(splitter="oc1", number_of_restarts=20, max_perturbations=10, random_state=random_state)
         
         # Black-box model fitting
         y_preds_train = cls.predict(train_x)
@@ -79,18 +79,18 @@ def get_results(train_x, train_y, test_x, test_y, classifiers):
         test_x = np.ascontiguousarray(test_x)
         y_preds_train = np.ascontiguousarray(y_preds_train)
         # OC1 fitting
-        tree.fit(train_x, y_preds_train)
-        surrogate_y_preds = tree.predict(test_x)
+        # tree.fit(train_x, y_preds_train)
+        # surrogate_y_preds = tree.predict(test_x)
         # DT fitting
-        # model_dt.fit(train_x, y_preds_train)
-        # surrogate_y_preds = model_dt.predict(test_x)
+        model_dt.fit(train_x, y_preds_train)
+        surrogate_y_preds = model_dt.predict(test_x)
         
         accuracy = round(cls.score(test_x, test_y), 3)
         precision = round(precision_score(y_preds_test, test_y), 3)
         recall = round(recall_score(y_preds_test, test_y), 3)
         f1 = round(f1_score(y_preds_test, test_y), 3)
-        tree_depth = tree.treeDepth()
-        # tree_depth = model_dt.get_depth()
+        # tree_depth = tree.treeDepth()
+        tree_depth = model_dt.get_depth()
         surrogate_accuracy = round(accuracy_score(surrogate_y_preds, y_preds_test), 3)
         surrogate_r2 = round(r2_score(y_preds_test, surrogate_y_preds), 3)
         names.append(cls.__class__.__name__)
@@ -102,8 +102,8 @@ def get_results(train_x, train_y, test_x, test_y, classifiers):
         surrogate_accuracy_list.append(surrogate_accuracy)
         surrogate_r2_list.append(surrogate_r2)
     results = {'Models': names,
-               'Surrogate Model': 'CART-OC1',
-            #    'Surrogate Model': 'CART',
+            #    'Surrogate Model': 'CART-OC1',
+               'Surrogate Model': 'CART',
                'Accuracy': accuracy_list,
                'Precision': precision_list,
                'Recall': recall_list, 
@@ -119,9 +119,9 @@ def get_results(train_x, train_y, test_x, test_y, classifiers):
 if __name__ == "__main__":
     X_train, X_test, y_train, y_test = dataPreprocessing()
     model_svc = SVC(kernel = 'rbf')
-    model_rf = RandomForestClassifier(n_estimators=400, min_samples_leaf=0.12, random_state=101)
+    # model_rf = RandomForestClassifier(n_estimators=400, min_samples_leaf=0.12, random_state=101)
     model_nb = GaussianNB(var_smoothing=0.001)
-    classifiers = [model_svc, model_rf, model_nb]
+    classifiers = [model_svc, model_nb]
     results = get_results(X_train, y_train, X_test, y_test, classifiers)
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(results)
