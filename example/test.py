@@ -27,6 +27,7 @@ node_cnt = tree.nodeCount()
 coefs = tree.getCoef(X_train.shape[1])
 
 print("Iris Accuracy:",accuracy_score(y_test, predictions))
+print("Num of attr:", X_train.shape[1])
 print("Leaf count:", leaf_cnt)
 print("Tree depth:", tree_depth)
 print("Node count:", node_cnt)
