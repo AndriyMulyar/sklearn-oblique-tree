@@ -119,8 +119,8 @@ def get_results(train_x, train_y, test_x, test_y, classifiers):
 if __name__ == "__main__":
     X_train, X_test, y_train, y_test = dataPreprocessing()
     model_svc = SVC(kernel = 'rbf')
-
-    classifiers = [model_svc]
+    model_rf = RandomForestClassifier(n_estimators=400, min_samples_leaf=0.12, random_state=101)
+    classifiers = [model_svc, model_rf]
     results = get_results(X_train, y_train, X_test, y_test, classifiers)
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(results)
