@@ -456,8 +456,78 @@ write_header(dtree)
   
   fprintf(dtree,"Training set: %s, ",train_data);
   fprintf(dtree,"Dimensions: %d, Categories: %d\n",
-	  no_of_dimensions,no_of_categories);
+	no_of_dimensions,no_of_categories);
   fprintf(dtree,"\n\n");
+}
+
+/************************************************************************/
+/* Module name :	node_count					*/ 
+/* Functionality :      Calculates the number of nodes of a subtree.   */
+/* Parameters : cur_node :      pointer to the root of the subtree whose*/
+/*                              leaves are to be counted.               */
+/* Returns :    number of nodes of the subtree pointed to by "cur_node"*/
+/* Calls modules :      node_count                                 	*/
+/* Is called by modules :       estimate_accuracy (classify.c)		*/
+/*				main (display.c)			*/
+/************************************************************************/
+int node_count(cur_node)
+     struct tree_node *cur_node;
+{
+  int nodes = 1;
+  
+  if (cur_node == NULL) return(0);
+  nodes += node_count(cur_node->left);
+  nodes += node_count(cur_node->right);
+  return nodes;
+}
+
+/************************************************************************/
+/* Module name :	preorder					*/ 
+/* Functionality :      Preorder traversal by writing to the array.   */
+/* Parameters : cur_node :      pointer to the root of the subtree whose*/
+/*                              leaves are to be counted.               */
+/* Returns :    number of nodes of the subtree pointed to by "cur_node"*/
+/* Calls modules :      preorder                                 	*/
+/* Is called by modules :       estimate_accuracy (classify.c)		*/
+/*				main (display.c)			*/
+/************************************************************************/
+void preorder(cur_node, cur_idx, ret)
+     struct tree_node *cur_node;
+     int* cur_idx;
+     float* ret;
+{
+  extern int no_of_dimensions;
+  if (cur_node == NULL) return;
+  for (int i=1;i<=no_of_dimensions;i++) {
+    ret[(*cur_idx) * no_of_dimensions + i-1] = cur_node->coefficients[i];
+    // ret[(*cur_idx) * no_of_dimensions + i-1] = i;
+  }
+  (*cur_idx)++;
+  preorder(cur_node->left, cur_idx, ret);
+  preorder(cur_node->right, cur_idx, ret);
+}
+
+/************************************************************************/
+/* Module name :	preorder_traversal					*/ 
+/* Functionality :      Preorder traversal by writing to the array.   */
+/* Parameters : preorder_traversal: pointer to the root of the subtree whose*/
+/*                              leaves are to be counted.               */
+/* Returns :    number of nodes of the subtree pointed to by "cur_node"*/
+/* Calls modules :      preorder                                 	*/
+/* Is called by modules :       estimate_accuracy (classify.c)		*/
+/*				main (display.c)			*/
+/************************************************************************/
+float* preorder_traversal(cur_node, cur_idx)
+     struct tree_node *cur_node;
+     int* cur_idx;
+{
+  extern int no_of_dimensions;
+  float *out;
+  int no_of_nodes = node_count(cur_node);
+  out = (float *)malloc(no_of_dimensions * no_of_nodes * sizeof(float));
+  *cur_idx= 0;
+  preorder(cur_node, cur_idx, out);
+  return out;
 }
 
 /************************************************************************/

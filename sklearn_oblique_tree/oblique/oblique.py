@@ -39,4 +39,15 @@ class ObliqueTree(BaseEstimator, ClassifierMixin):
 
     def predict(self, X):
         return self.tree.predict(X)
+    
+    def treeDepth(self):
+        return self.tree.treeDepth()
 
+    def leafCount(self):
+        return self.tree.leafCount()
+
+    def nodeCount(self):
+        return self.tree.nodeCount()
+
+    def getCoef(self, attr_num):
+        return self.tree.getCoef(attr_num)

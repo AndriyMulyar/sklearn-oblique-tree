@@ -1,4 +1,4 @@
-from _oblique cimport build_tree, srand48 #Struct for an oblique tree node with references to children
+# from _oblique cimport build_tree, srand48 #Struct for an oblique tree node with references to children
 from libc.stdio cimport printf
 import numpy as np
 cimport numpy as np
@@ -72,12 +72,10 @@ cdef class Tree:
 
         sklearn_root_node = build_tree(points, num_points, NULL)
 
-
-
-
     cpdef predict(self, np.ndarray[np.float_t, ndim=2, mode="c"] X):
         cdef int num_predict_points = len(X)
         cdef int i
+        cdef int depth
         cdef POINT ** points_predict = <POINT**> malloc(num_predict_points * sizeof(POINT*))
         cdef np.ndarray[np.int32_t, ndim=1] predictions = np.empty(num_predict_points, dtype=np.int32)
         global sklearn_root_node
@@ -91,15 +89,34 @@ cdef class Tree:
             points_predict[i].category = -1
             points_predict[i].val = 0
 
-
         classify(points_predict, num_predict_points, sklearn_root_node, NULL)
-
         for i in range(1,num_predict_points+1):
             predictions[i-1] = points_predict[i].category - 1 #decrement to account for increment in train
-
+        
         return predictions
+    
+    cpdef treeDepth(self):
+        cdef int depth
+        global sklearn_root_node
+        depth = tree_depth(sklearn_root_node)
+        return depth
+    
+    cpdef leafCount(self):
+        cdef int leaf_cnt
+        global sklearn_root_node
+        leaf_cnt = leaf_count(sklearn_root_node)
+        return leaf_cnt
 
+    cpdef nodeCount(self):
+        cdef int node_cnt
+        global sklearn_root_node
+        node_cnt = node_count(sklearn_root_node)
+        return node_cnt
 
+    cpdef getCoef(self, int attr_num):
+        cdef int node_cnt = self.nodeCount()
+        cdef float[::1] coefs = <float[:node_cnt*attr_num]> preorder_traversal(sklearn_root_node)
+        return np.asarray(coefs)
 
 
 

@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 from setuptools.extension import Extension
-#from Cython.Build import cythonize
+from Cython.Build import cythonize
 
 from sklearn_oblique_tree import __authors__, __version__
 import numpy,sys
@@ -12,7 +12,7 @@ packages = find_packages()
 extensions = [
      Extension("sklearn_oblique_tree.oblique._oblique",["sklearn_oblique_tree/oblique/_oblique.pyx",
                                                         "oc1_source/load_data.c",
-                                                        #"oc1_source/train_util.c",
+                                                        # "oc1_source/train_util.c",
                                                         "oc1_source/perturb.c",
                                                         "oc1_source/classify.c",
 
@@ -20,7 +20,7 @@ extensions = [
                                                         "oc1_source/impurity_measures.c",
                                                         "oc1_source/prune.c",
                                                         "oc1_source/util.c",
-                                                       # "oc1_source/classify_util.c",
+                                                        # "oc1_source/classify_util.c",
                                                         "oc1_source/tree_util.c"
                                                         ],
                include_dirs=[numpy.get_include(), '.'],
@@ -79,8 +79,8 @@ setup(
     ],
 
 
-    #ext_modules=cythonize(extensions, gdb_debug=False),
-    ext_modules=extensions,
+    ext_modules=cythonize(extensions, gdb_debug=False),
+    # ext_modules=extensions,
 
     #testing
     tests_require=["pytest"],
