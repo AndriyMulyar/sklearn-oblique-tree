@@ -120,7 +120,8 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = dataPreprocessing()
     model_svc = SVC(kernel = 'rbf')
     model_rf = RandomForestClassifier(n_estimators=400, min_samples_leaf=0.12, random_state=101)
-    classifiers = [model_svc, model_rf]
+    model_nb = GaussianNB(var_smoothing=0.001)
+    classifiers = [model_svc, model_rf, model_nb]
     results = get_results(X_train, y_train, X_test, y_test, classifiers)
     with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
         print(results)
